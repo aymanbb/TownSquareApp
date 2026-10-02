@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import styles from "./welcome.module.css";
+import { Footer } from "@/components/Footer"
 
 export const Welcome = () => {
   return (
@@ -77,7 +78,10 @@ export const Welcome = () => {
             .
           </p>
         </section>
+
       </main>
+
+      <Footer />
     </div>
   );
 };
