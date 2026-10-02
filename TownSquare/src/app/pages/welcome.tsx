@@ -81,8 +81,10 @@ export const Welcome = () => {
 
       </main>
 
-      <Footer />
-    </div>
+      <section>
+        <Footer />
+      </section>
+y    </div>
   );
 };
 
