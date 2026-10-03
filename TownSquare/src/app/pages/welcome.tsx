@@ -84,7 +84,7 @@ export const Welcome = () => {
       <section>
         <Footer />
       </section>
-y    </div>
+     </div>
   );
 };
 
