@@ -22,10 +22,12 @@
     "types": "tsc"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-server-dom-webpack": "19.2.8",
-    "rwsdk": "1.7.3"
+    "rwsdk": "1.7.3",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.50.0",
