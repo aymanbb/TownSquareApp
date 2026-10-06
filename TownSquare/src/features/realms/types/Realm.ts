@@ -1,4 +1,4 @@
-import type { Post } from "./Post";
+import type { Post } from "../../posts/types/Post";
 
 export type Realm = {
   id: string;

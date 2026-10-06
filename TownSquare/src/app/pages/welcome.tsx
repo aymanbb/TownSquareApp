@@ -7,7 +7,7 @@
 
 import { useState } from "react";
 import styles from "./welcome.module.css";
-import { Footer } from "@/components/Footer"
+import { Footer } from "@/features/global/components/Footer"
 
 export const Welcome = () => {
   return (
