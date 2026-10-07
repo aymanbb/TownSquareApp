@@ -12,6 +12,7 @@ import { Home } from "@/app/pages";
 import { Login } from "@/app/pages/login";
 import { Register } from "@/app/pages/register";
 
+import { Leaderboard } from "@/app/pages/leaderboard";
 import { User } from "@/app/pages/user";
 import { Realms } from "@/app/pages/realm/realms";
 import { RealmPage } from "@/app/pages/realm/realmPage";
@@ -60,6 +61,7 @@ export default defineApp([
       )),
       route("/about", About),
       route("/support", Support),
+      route("/leaderboard", Leaderboard),
     ]),
   ]),
 ]);
