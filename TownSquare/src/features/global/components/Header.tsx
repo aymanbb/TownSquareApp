@@ -1,12 +1,15 @@
 import React from "react";
-import { NavBar } from "./NavBar";
-export const Header = () => {
+import type { ReactNode } from "react";
+
+type HeaderProps = {
+  children?: ReactNode;
+};
+
+export function Header({ children }: HeaderProps) {
   return (
     <header>
-      {
-        //<Logo />
-      }
-      <NavBar />
+      <h1>Header</h1>
+      {children}
     </header>
   );
-};
+}
