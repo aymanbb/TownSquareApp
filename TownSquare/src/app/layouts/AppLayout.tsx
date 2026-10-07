@@ -5,6 +5,7 @@ export function AppLayout({ children, requestInfo }: LayoutProps) {
   return (
     <div className="app">
       <Header>
+        <img src="/assets/icons/svg/logo.svg" alt="Application's Logo" />
         {requestInfo && (
           <span>Path: {new URL(requestInfo.request.url).pathname}</span>
         )}
