@@ -1,11 +1,11 @@
 import type { Post } from "../../posts/types/Post";
 
 export type Realm = {
-  id: string;
+  id: number;
   name: string;
-  description?: string;
-  ownerId: string;
+  description: string;
+  ownerId: number;
   createdAt: string;
-  updatedAt: string | null;
+  updatedAt?: string;
   //posts: Post[];
 };
