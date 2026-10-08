@@ -22,7 +22,9 @@ import { About } from "@/app/pages/about";
 import { Settings } from "@/app/pages/settings";
 import { Support } from "@/app/pages/support";
 
-export type AppContext = {};
+export type AppContext = {
+  db: D1Database;
+};
 
 export default defineApp([
   setCommonHeaders(),
