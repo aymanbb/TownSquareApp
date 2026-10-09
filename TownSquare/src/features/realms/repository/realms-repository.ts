@@ -8,6 +8,7 @@ const realms: Realm[] = [
         ownerId: "3",
         createdAt: "Yesterday",
         updatedAt: null,
+        membersCount: 324,
         //posts: Post[]
     },
     {
@@ -17,6 +18,7 @@ const realms: Realm[] = [
         ownerId: "1",
         createdAt: "Today",
         updatedAt: null,
+        membersCount: 10,
         //posts: Post[]
     },
     {
@@ -26,6 +28,7 @@ const realms: Realm[] = [
         ownerId: "2",
         createdAt: "Today",
         updatedAt: null,
+        membersCount: 42,
         //posts: Post[]
     },
 ]

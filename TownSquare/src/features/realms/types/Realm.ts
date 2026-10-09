@@ -6,6 +6,7 @@ export type Realm = {
   description?: string;
   ownerId: string;
   createdAt: string;
-  updatedAt: string;
-  posts: Post[];
+  updatedAt: string | null;
+  membersCount: number;
+  //posts: Post[];
 };
