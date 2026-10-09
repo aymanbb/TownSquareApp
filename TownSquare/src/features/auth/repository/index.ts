@@ -1,1 +1,1 @@
-export { createDummyUserRepo } from "./dummyUserRepo";
+export { createUserRepository } from "./auth-repository";
