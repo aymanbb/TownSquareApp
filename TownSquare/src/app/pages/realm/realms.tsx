@@ -5,6 +5,7 @@ import { Realm } from "@/features/realms/types/Realm";
 import { RealmsService, realmsService } from "@/features/realms/service/realms-service";
 import { create } from "node:domain";
 import { Result, ResultData } from "@/features/realms/types/Result";
+import { RealmCard } from "@/features/realms/components/RealmCard";
 
 /*
 type RealmProps = {
@@ -114,10 +115,7 @@ export const Realms = () => {
       <ul>
         {data.map((realm) => (
           <li key={realm.id}>
-            Name: {realm.name} - 
-            Description: {realm.description} - 
-            Created at: {realm.createdAt} - 
-            Owner ID: {realm.ownerId}
+            <RealmCard children={realm}/>
           </li>
         ))}
       </ul>
