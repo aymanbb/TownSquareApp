@@ -1,15 +1,23 @@
 import { dummyUsers } from "./dummyData";
-import { IUserRepository } from "./auth.repository";
 import type { User } from "../types/User";
 import { error } from "node:console";
 
-export function createDummyUserRepo(db: User[] = dummyUsers): IUserRepository {
+export interface IUserRepository {
+  create: (user: User) => Promise<any>;
+  remove: (id: string) => Promise<any>;
+  update: (id: string, task: any) => Promise<any>;
+  get: (id: string) => Promise<User>;
+  list: () => Promise<User[]>;
+  isAdmin: (id: string) => Promise<boolean>;
+  sortByLevel: () => Promise<User[]>;
+}
+
+export function createUserRepository(db: User[] = dummyUsers): IUserRepository {
   // Save all the data inside a variable.
-  let data = db;
   return {
     create: async (user) => {
       // We check if the user given in the parameter already exists this is to remove duplicates.
-      data.map((existingUsers) => {
+      db.map((existingUsers) => {
         if (existingUsers === user) {
           throw new Error("Cannot add the same user twice");
         } else if (existingUsers.id === user.id) {
@@ -17,7 +25,7 @@ export function createDummyUserRepo(db: User[] = dummyUsers): IUserRepository {
         }
       });
 
-      data.push(user);
+      db.push(user);
       return user;
     },
     remove: async (id: string) => {
@@ -25,23 +33,23 @@ export function createDummyUserRepo(db: User[] = dummyUsers): IUserRepository {
       // Returns new list but with the chosen id
 
       // We check if datasize is 0
-      if (data.length === 0) {
+      if (db.length === 0) {
         throw new Error("There are no Users to remove");
       }
-      const newData = data.filter((user) => user.id !== id);
+      const newData = db.filter((user) => user.id !== id);
 
       // We check if there were any changes in the data
-      if (data.length === newData.length) {
+      if (db.length === newData.length) {
         throw new Error("No user with that id");
       }
-      data = newData;
+      db = newData;
     },
     update: async (id: string, task: any) => {
       throw new Error("Function not implemented.");
     },
     get: async (id: string) => {
       // We make an async function for finding a specific user.
-      const user = data.find((user) => user.id === id);
+      const user = db.find((user) => user.id === id);
 
       if (!user) {
         throw new Error("User not found");
@@ -50,11 +58,16 @@ export function createDummyUserRepo(db: User[] = dummyUsers): IUserRepository {
       return user;
     },
     list: async () => {
-      return data;
+      return db;
     },
     isAdmin: async (id: string) => {
-      const user = data.find((user) => user.id === id);
+      const user = db.find((user) => user.id === id);
       return user?.role === "admin";
+    },
+    sortByLevel: async () => {
+      return [...db].sort((a, b) => b.level - a.level);
     },
   };
 }
+
+export const userRepository = createUserRepository(dummyUsers);

@@ -22,6 +22,9 @@ import { About } from "@/app/pages/about";
 import { Settings } from "@/app/pages/settings";
 import { Support } from "@/app/pages/support";
 
+import { realmsController } from "./features/realms/controller/realms-controller";
+import { Realm } from "./features/realms/types/Realm";
+
 export type AppContext = {};
 
 export default defineApp([
@@ -36,6 +39,11 @@ export default defineApp([
     which takes a path and a component to render for that path. 
     The `render` function is used to render the component within the `Document` layout.
   */
+
+  route("/api/realms/create", async ({ request }  ) => {
+    const realmForm: Partial<Realm> = await request.json();
+    return await realmsController.create(realmForm);
+  }),
 
   // Routes
   // index page
