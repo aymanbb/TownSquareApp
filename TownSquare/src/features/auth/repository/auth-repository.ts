@@ -9,6 +9,7 @@ export interface IUserRepository {
   get: (id: string) => Promise<User>;
   list: () => Promise<User[]>;
   isAdmin: (id: string) => Promise<boolean>;
+  sortByLevel: () => Promise<User[]>;
 }
 
 export function createUserRepository(db: User[] = dummyUsers): IUserRepository {
@@ -62,6 +63,9 @@ export function createUserRepository(db: User[] = dummyUsers): IUserRepository {
     isAdmin: async (id: string) => {
       const user = db.find((user) => user.id === id);
       return user?.role === "admin";
+    },
+    sortByLevel: async () => {
+      return [...db].sort((a, b) => b.level - a.level);
     },
   };
 }

@@ -3,6 +3,7 @@ import {
   type IUserRepository,
 } from "@/features/auth/repository/auth-repository";
 import type { User } from "../types/User";
+import { create } from "node:domain";
 
 export interface IUserService {
   create: (user: User) => Promise<any>;
@@ -11,6 +12,7 @@ export interface IUserService {
   get: (id: string) => Promise<User>;
   list: () => Promise<User[]>;
   isAdmin: (id: string) => Promise<boolean>;
+  sortByLevel: () => Promise<User[]>;
 }
 
 export function createUserService(repository: IUserRepository): IUserService {
@@ -24,5 +26,10 @@ export function createUserService(repository: IUserRepository): IUserService {
       const user = await repository.get(id);
       return Boolean((user as any)?.isAdmin ?? false);
     },
+    sortByLevel: async () => {
+      return await repository.sortByLevel();
+    },
   };
 }
+
+export const userService = createUserService(userRepository);
