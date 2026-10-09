@@ -16,8 +16,15 @@ type FooterProps = {
   children?: ReactNode;
 };
 
-//consts for the Social Links in the footer:
+const stoneHeadingStyle = `
+  flex w-full h-24
+  items-center justify-center
+  bg-[url('/assets/icons/svg/StoneForm.svg')]
+  bg-contain bg-no-repeat bg-center
+  px-4 text-center
+`;
 
+//consts for the Social Links in the footer:
 const pixelSizeIcon = 20;
 const yPosition = 10;
 const socialLinks = [
@@ -56,7 +63,7 @@ export function Footer({ children }: FooterProps) {
 
   return (
     //React-Fragment (must be moved above the first child) used so parent can have multiple children without giving up sematic tags.
-    <div
+    <footer
       className="
     relative w-full
     bg-[url('/assets/textures/png/brick-texture.png')]
@@ -65,7 +72,7 @@ export function Footer({ children }: FooterProps) {
      shadow-[0_0_15px_4px_rgba(0,0,0,0.8)]
   "
     >
-      <footer
+      <div
         className="
          shadow-[inset_0_0_12px_4px_rgba(0,0,0,0.85)]
     relative w-full overflow-hidden
@@ -120,15 +127,7 @@ export function Footer({ children }: FooterProps) {
           </section>
 
           <section className="text-center">
-            <div
-              className="
-    relative flex items-center justify-center
-    aspect-[2048/700] w-full
-    bg-[url('/assets/icons/svg/StoneForm.svg')]
-    bg-contain bg-no-repeat bg-center
-    px-[10%] py-[8%]
-  "
-            >
+            <div className={stoneHeadingStyle}>
               <h3 className="mb-3 font-['Cinzel_Decorative'] text-xl font-black text-amber-400 sm:text-2xl">
                 Quick Links
               </h3>
@@ -149,15 +148,7 @@ export function Footer({ children }: FooterProps) {
           </section>
 
           <section className="text-center">
-            <div
-              className="
-    relative flex items-center justify-center
-    aspect-[2048/700] w-full
-    bg-[url('/assets/icons/svg/StoneForm.svg')]
-    bg-contain bg-no-repeat bg-center
-    px-[10%] py-[8%]
-  "
-            >
+            <div className={stoneHeadingStyle}>
               {" "}
               <h3 className="mb-3 font-['Cinzel_Decorative'] text-xl font-black text-amber-400 sm:text-2xl">
                 Follow Us
@@ -179,17 +170,9 @@ export function Footer({ children }: FooterProps) {
             </ul>
           </section>
 
-          <section className="min-w-0">
-            <div
-              className="
-    relative flex items-center justify-center
-    aspect-[2048/700] w-full
-    bg-[url('/assets/icons/svg/StoneForm.svg')]
-    bg-contain bg-no-repeat bg-center
-    px-[10%] py-[8%]
-  "
-            >
-              <h3 className="mb-3 text-center font-['Cinzel_Decorative'] text-xl font-black text-amber-400 sm:text-2xl lg:text-left">
+          <section className="flex min-w-0 flex-col items-center lg:items-stretch">
+            <div className={stoneHeadingStyle}>
+              <h3 className="mb-3 font-['Cinzel_Decorative'] text-xl font-black text-amber-400 sm:text-2xl">
                 Newsletter
               </h3>
             </div>
@@ -197,7 +180,7 @@ export function Footer({ children }: FooterProps) {
             <NewsletterForm />
           </section>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
   );
 }
