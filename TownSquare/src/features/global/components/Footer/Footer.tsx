@@ -31,7 +31,7 @@ export function Footer({ children }: FooterProps) {
     //React-Fragment (must be moved above the first child) used so parent can have multiple children without giving up sematic tags.
     <footer>
       <section>
-        <img src="/assets/icons/svg/Dislike.svg" alt="Application's Logo" />
+        <img src="/assets/icons/svg/logo.svg" alt="Application's Logo" />
       </section>
 
       <section>
