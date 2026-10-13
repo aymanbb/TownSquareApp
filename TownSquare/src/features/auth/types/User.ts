@@ -1,11 +1,11 @@
 export type User = {
-  id: number;
+  id: string;
   role: "user" | "admin";
   username: string;
   email: string;
   displayName?: string;
   avatarUrl?: string;
   bio?: string;
-  createdAt: Date;
+  createdAt: string;
   level: number;
 };
