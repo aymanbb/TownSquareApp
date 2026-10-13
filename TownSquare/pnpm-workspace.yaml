@@ -3,5 +3,6 @@
 # carry their own build-script approvals.
 allowBuilds:
   esbuild: true
+  pnpm: set this to true or false
   sharp: true
   workerd: true
