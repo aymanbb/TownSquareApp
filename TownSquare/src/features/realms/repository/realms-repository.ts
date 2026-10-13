@@ -44,12 +44,13 @@ export function createRealmsRepository(db: Realm[]): RealmsRepository {
                 return {
                     success: false,
                     error: {
-                        message: "Name and ownerId are required." + realmForm.name,
+                        message: "Name and ownerId are required." + realmForm,
                         code: 400,
                     },
                 };
             }
 
+            // for testing, når nye realm-en blir lagt inn i databasen så blir realm-ID ordnet av AUTO_INCREMENT
             const lastRealm = db.at(-1);
             const nextId = lastRealm ? lastRealm.id + 1 : 1;
 

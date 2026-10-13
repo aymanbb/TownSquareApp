@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Realm } from "@/features/realms/types/Realm";
-import { RealmsService, realmsService } from "@/features/realms/service/realms-service";
-import { create } from "node:domain";
+import { realmsService } from "@/features/realms/service/realms-service";
 import { Result, ResultData } from "@/features/realms/types/Result";
 
 /*

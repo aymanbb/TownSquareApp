@@ -16,24 +16,9 @@ export function createRealmsService(repository: typeof realmsRepository): Realms
 
     async create(realmForm: Partial<Realm>): Promise<Result<Realm>> {
       try {
-        const result = await realmsRepository.create(realmForm);
-
-        /*if (result && !result.success) {
-          return {
-            success: false,
-            error: {
-              message: result.error.message,
-              code: 500,
-            }
-          }
-            */
-           return result;
-        }
-          /*return {
-            success: true,
-            data: realmForm,
-          }
-      }*/
+          const result = await realmsRepository.create(realmForm);
+          return result;
+      }
       catch (e){
         console.error(e);
         return {
