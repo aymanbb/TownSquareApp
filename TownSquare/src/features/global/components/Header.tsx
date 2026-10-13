@@ -7,8 +7,7 @@ type HeaderProps = {
 
 export function Header({ children }: HeaderProps) {
   return (
-    <header>
-      <h1>Header</h1>
+    <header className="flex items-center bg-gray-700 min-h-[60px] px-4">
       {children}
     </header>
   );
