@@ -1,6 +1,5 @@
 import type { LayoutProps } from "rwsdk/router";
 import { Header, Footer, NavBar } from "@/features/global/components";
-import { SideBar } from "@/features/global/components/Aside/SideBar";
 
 export function AppInfoLayout({ children, requestInfo }: LayoutProps) {
   return (

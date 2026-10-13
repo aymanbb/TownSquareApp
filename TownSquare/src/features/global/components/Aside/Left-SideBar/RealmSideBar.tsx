@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { MyRealmList } from "./sideBar-content/MyRealmList";
 import { ScrollView } from "@/features/global/components/ScrollView";
 
-export const SideBar = () => {
+export const RealmSideBar = () => {
   const [myReamls, setMyRealms] = useState([]);
 
   return (
