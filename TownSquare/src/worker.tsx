@@ -24,9 +24,7 @@ import { Support } from "@/app/pages/support";
 import { AuthLayout } from "./app/layouts/AuthLayout";
 import { AppInfoLayout } from "./app/layouts/AppInfoLayout";
 
-export type AppContext = {
-  db: D1Database;
-};
+export type AppContext = {};
 
 export default defineApp([
   setCommonHeaders(),
