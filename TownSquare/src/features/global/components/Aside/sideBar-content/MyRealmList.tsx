@@ -50,7 +50,13 @@ const communities = [
 ];
 export const MyRealmList = () => {
   return (
-    <ul className="min-h-0 flex-1 overflow-y-auto">
+    <ul
+      className="
+      shadow-[inset_0_0_12px_4px_rgba(0,0,0,0.85)]
+    relative w-full overflow-hidden
+    bg-[url('/assets/textures/png/footer-stone.png')]
+    bg-repeat bg-[length:150px_150px]"
+    >
       {communities.map((community, index) => (
         <MyRealmsCard key={community} index={index} communityName={community} />
       ))}

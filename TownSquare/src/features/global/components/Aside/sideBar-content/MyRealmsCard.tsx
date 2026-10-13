@@ -5,10 +5,10 @@ type MyRealmsCardProps = {
   index: number;
 };
 
-export const MyRealmsCard = ({ communityName }: MyRealmsCardProps) => {
+export const MyRealmsCard = ({ communityName, index }: MyRealmsCardProps) => {
   console.log(communityName);
   return (
-    <li key={communityName}>
+    <li key={communityName + index}>
       <text className="font-['Almendra'] text-base text-yellow-400 hover:text-white">
         {" "}
         {communityName ?? ""}

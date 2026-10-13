@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { MyRealmList } from "./sideBar-content/MyRealmList";
+import { ScrollView } from "@/features/global/components/ScrollView";
 
 export const SideBar = () => {
   const [myReamls, setMyRealms] = useState([]);
@@ -12,11 +13,13 @@ export const SideBar = () => {
       <button
         type="button"
         onClick={() => console.log("Create realm")}
-        className="w-full bg-neutral-200 px-2 py-2 text-sm hover:bg-neutral-100"
+        className="w-full bg-blue-200 px-2 py-2 text-sm hover:bg-neutral-100"
       >
         Create new realm
       </button>
-      <MyRealmList />
+      <ScrollView className="h-[500px]">
+        <MyRealmList />
+      </ScrollView>
     </>
   );
 };
