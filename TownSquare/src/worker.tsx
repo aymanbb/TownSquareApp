@@ -21,6 +21,8 @@ import { RealmPostPage } from "@/app/pages/realm/realmPostPage";
 import { About } from "@/app/pages/about";
 import { Settings } from "@/app/pages/settings";
 import { Support } from "@/app/pages/support";
+import { AuthLayout } from "./app/layouts/AuthLayout";
+import { AppInfoLayout } from "./app/layouts/AppInfoLayout";
 
 export type AppContext = {
   db: D1Database;
@@ -42,11 +44,12 @@ export default defineApp([
   // Routes
   // index page
   render(Document, [
+    layout(AuthLayout, [route("/login", Login), route("/register", Register)]),
+    layout(AppInfoLayout, [route("/about", About), route("/support", Support)]),
     layout(AppLayout, [
       route("/", Home),
       route("/about", About),
-      route("/login", Login),
-      route("/register", Register),
+
       route("/realms", Realms),
       route("/realms/:realmId", ({ params }) => (
         <RealmPage realmId={String(params.realmId ?? "")} />
@@ -61,8 +64,6 @@ export default defineApp([
       route("/user/:userId", ({ params }) => (
         <User userId={String(params.userId ?? "")} />
       )),
-      route("/about", About),
-      route("/support", Support),
       route("/leaderboard", Leaderboard),
     ]),
   ]),

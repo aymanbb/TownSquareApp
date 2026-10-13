@@ -7,7 +7,12 @@ type HeaderProps = {
 
 export function Header({ children }: HeaderProps) {
   return (
-    <header className="flex items-center bg-gray-700 min-h-[60px] px-4">
+    <header
+      className="h-55 w-full
+      bg-[url('/assets/textures/png/HeaderBackground-texture.png')]
+      bg-[length:100%_auto]
+      bg-center bg-no-repeat"
+    >
       {children}
     </header>
   );
