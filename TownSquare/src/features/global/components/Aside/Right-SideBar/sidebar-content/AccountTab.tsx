@@ -15,6 +15,13 @@ export const AccountTab = () => {
         <p>Or</p>
         <a href="/register">Register</a>
       </section>
+
+      <section className="flex flex-col gap-2">
+        <a href="">View Profile</a>
+        <a href="">Messages</a>
+        <a href="">Settings</a>
+        <a href="">Logout</a>
+      </section>
     </div>
   );
 };
