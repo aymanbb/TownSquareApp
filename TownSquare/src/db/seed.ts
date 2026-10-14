@@ -12,6 +12,7 @@ export default defineScript(async ({ env }) => {
   await db.insert(users).values({
     name: "Test user",
     email: "test@testuser.io",
+    password: "123",
   });
 
   // Verify the insert by selecting all users
