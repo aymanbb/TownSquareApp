@@ -15,6 +15,13 @@
       "when": 1792000024129,
       "tag": "0001_deep_ma_gnuci",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792004187529,
+      "tag": "0002_kind_captain_cross",
+      "breakpoints": true
     }
   ]
 }

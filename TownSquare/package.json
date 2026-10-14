@@ -26,14 +26,17 @@
     "seed": "npm run worker:run ./src/db/seed.ts"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.7.7",
     "@tailwindcss/vite": "^4.3.3",
+    "better-auth": "^1.7.7",
     "dotenv": "^18.0.7",
     "drizzle-orm": "^0.45.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-server-dom-webpack": "19.2.8",
     "rwsdk": "1.7.3",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.50.0",
