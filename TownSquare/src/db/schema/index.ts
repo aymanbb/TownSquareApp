@@ -1,3 +1,5 @@
 // src/db/schema/index.ts
 
-export * from "./user-schema";
+export * from "./comment-schema";
+export * from "./post-schema";
+export * from "./realm-schema";
