@@ -18,16 +18,32 @@ import { Realms } from "@/app/pages/realm/realms";
 import { RealmPage } from "@/app/pages/realm/realmPage";
 import { RealmPostPage } from "@/app/pages/realm/realmPostPage";
 
+import { AdminDashboardPage } from "./features/auth/components/AdminDashBoardPage";
+
 import { About } from "@/app/pages/about";
 import { Settings } from "@/app/pages/settings";
 import { Support } from "@/app/pages/support";
 import { AuthLayout } from "./app/layouts/AuthLayout";
 import { AppInfoLayout } from "./app/layouts/AppInfoLayout";
-
+import { auth } from "./auth/auth";
+import { authMiddleware } from "./auth/middleware";
+import { requireAdmin } from "./shared/lib/guards";
 export type AppContext = {};
 
 export default defineApp([
   setCommonHeaders(),
+  authMiddleware,
+
+  route("/api/auth/*", async ({ request }) => {
+    return auth.handler(request);
+  }),
+  route("/admin", [
+    () => {
+      requireAdmin();
+    },
+    AdminDashboardPage,
+  ]),
+
   ({ ctx }) => {
     // setup ctx here
     ctx;

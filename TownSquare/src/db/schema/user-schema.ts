@@ -1,12 +1,15 @@
 // src/db/schema/user-schema.ts
 
-import { sqliteTable, text, int } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
-export const users = sqliteTable("users", {
-  id: int().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
-  email: text().notNull().unique(),
-  password: text().notNull().unique(),
+export const userProfiles = sqliteTable("user_profiles", {
+  id: integer().primaryKey({ autoIncrement: true }),
+
+  // Referanse til bruker-ID-en fra Better Auth.
+  userId: text().notNull().unique(),
+
+  bio: text(),
 });
 
-export type User = typeof users.$inferSelect;
+export type UserProfile = typeof userProfiles.$inferSelect;
+export type NewUserProfile = typeof userProfiles.$inferInsert;
