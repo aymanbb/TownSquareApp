@@ -1,3 +1,4 @@
+// Denne filen konfigurerer Better Auth for autentisering i applikasjonen.
 // src/auth/auth.ts
 import { env } from "cloudflare:workers";
 import { betterAuth } from "better-auth";
