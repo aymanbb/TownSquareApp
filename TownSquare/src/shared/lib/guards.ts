@@ -1,4 +1,5 @@
 // src/shared/lib/guards.ts
+// Middleware guards for autentisering og autorisasjon
 import { ErrorResponse, requestInfo } from "rwsdk/worker";
 
 export function requireUser() {
