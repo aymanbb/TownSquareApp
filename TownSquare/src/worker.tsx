@@ -18,7 +18,7 @@ import { Realms } from "@/app/pages/realm/realms";
 import { RealmPage } from "@/app/pages/realm/realmPage";
 import { RealmPostPage } from "@/app/pages/realm/realmPostPage";
 
-import { AdminDashboardPage } from "./features/auth/components/AdminDashBoardPage";
+//import { AdminDashboardPage } from "./features/auth/components/AdminDashBoardPage";
 
 import { About } from "@/app/pages/about";
 import { Settings } from "@/app/pages/settings";
@@ -41,7 +41,7 @@ export default defineApp([
     () => {
       requireAdmin();
     },
-    AdminDashboardPage,
+    //AdminDashboardPage,
   ]),
 
   ({ ctx }) => {
