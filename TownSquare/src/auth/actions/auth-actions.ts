@@ -3,7 +3,7 @@
 // src/features/auth/actions/auth.ts
 "use server";
 
-import { auth } from "@/auth/auth";
+import { auth } from "@/auth/config/auth-config";
 import { getRequestInfo } from "rwsdk/worker";
 import { z } from "zod";
 

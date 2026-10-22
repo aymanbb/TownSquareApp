@@ -1,5 +1,6 @@
+// Kobler Better Auth til databasen og konfigurerer autentisering for applikasjonen.
 // Denne filen konfigurerer Better Auth for autentisering i applikasjonen.
-// src/auth/auth.ts
+// src/auth/config/auth-config.ts
 import { env } from "cloudflare:workers";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";

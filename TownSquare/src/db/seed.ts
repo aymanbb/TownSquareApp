@@ -2,7 +2,7 @@
 // denne filen brukes til å seed'e testbrukere i databasen
 
 import { defineScript } from "rwsdk/worker";
-import { auth } from "@/auth/auth";
+import { auth } from "@/auth/config/auth-config";
 import { db } from "@/db";
 import { user } from "@/db/schema/auth";
 import { eq } from "drizzle-orm";

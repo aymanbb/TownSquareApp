@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { authClient } from "@/auth/auth-client";
+import { authClient } from "@/auth/config/auth-client";
 export const AccountTab = () => {
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;

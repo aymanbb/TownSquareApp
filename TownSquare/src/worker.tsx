@@ -25,8 +25,8 @@ import { Settings } from "@/app/pages/settings";
 import { Support } from "@/app/pages/support";
 import { AuthLayout } from "@/app/layouts/AuthLayout";
 import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
-import { auth } from "./auth/auth";
-import { authMiddleware } from "./auth/middleware";
+import { auth } from "./auth/config/auth-config";
+import { authMiddleware } from "./auth/config/middleware";
 import { requireAdmin } from "../lib/guards";
 export type AppContext = {
   // user: SessionUser | null;

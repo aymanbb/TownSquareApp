@@ -2,8 +2,8 @@
 import { user } from "@/db/schema/auth";
 import React, { useState, FormEvent } from "react";
 import { z } from "zod";
-import { authClient } from "@/auth/auth-client";
-import { signUpSchema } from "@/features/auth/zod/schemas";
+import { authClient } from "@/auth/config/auth-client";
+import { signInSchema } from "@/features/auth/zod/schemas";
 // This is a placeholder for the Login page. You can replace this with your actual Login page content.
 export const Login = () => {
   // denne gjør at siden ikke refresher når skjemaet sendes inn
@@ -23,15 +23,14 @@ export const Login = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    // declare the signIn function from the authClient instance.
     const { signIn } = authClient;
-    const result = signUpSchema.safeParse({
-      email: email,
-      password: password,
-    });
+    const result = signInSchema.safeParse({ email, password });
     if (!result.success) {
       setFieldErrors(z.flattenError(result.error).fieldErrors);
       return;
     }
+    setFieldErrors({});
     setLoading(true);
     const { error } = await signIn.email({
       email,

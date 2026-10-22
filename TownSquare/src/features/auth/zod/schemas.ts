@@ -12,3 +12,8 @@ export const registerFormSchema = signUpSchema
     message: "Passordene er ikke like",
     path: ["confirmPassword"],
   });
+
+export const signInSchema = z.object({
+  email: z.email("Ugyldig e-post"),
+  password: z.string().min(1, "Skriv inn passord"),
+});
