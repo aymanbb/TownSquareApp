@@ -19,6 +19,9 @@ export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
 
+  logger: { level: "debug" }, // ← ny
+  onAPIError: { throw: true },
+
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
