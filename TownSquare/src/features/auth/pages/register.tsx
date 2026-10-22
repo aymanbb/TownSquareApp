@@ -1,4 +1,4 @@
-"use client";
+import Buffering from "@/features/global/components/Buffering";
 import { useState, FormEvent } from "react";
 import { z } from "zod";
 import { registerFormSchema } from "@/features/auth/zod/schemas";
@@ -109,7 +109,7 @@ export const Register = () => {
         {error && <p>{error}</p>}
         <button type="submit" disabled={loading}>
           {" "}
-          {loading ? "loading" : "Register"}
+          {loading ? <Buffering /> : "Register"}
         </button>
       </form>
     </>
