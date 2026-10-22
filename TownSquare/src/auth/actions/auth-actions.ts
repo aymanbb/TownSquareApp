@@ -1,3 +1,5 @@
+// Denne filen er ikke i bruk direkte, men inneholder handlinger for autentisering.
+
 // src/features/auth/actions/auth.ts
 "use server";
 

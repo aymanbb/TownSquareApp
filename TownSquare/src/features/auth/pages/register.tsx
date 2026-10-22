@@ -1,7 +1,7 @@
 "use client";
 import { useState, FormEvent } from "react";
 import { z } from "zod";
-import { registerFormSchema } from "../schemas";
+import { registerFormSchema } from "@/features/auth/zod/schemas";
 import { authClient } from "@/auth/auth-client";
 // This is a placeholder for the Register page. You can replace this with your actual Register page content.
 

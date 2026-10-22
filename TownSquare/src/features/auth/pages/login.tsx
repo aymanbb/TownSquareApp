@@ -1,8 +1,9 @@
 "use client";
 import { user } from "@/db/schema/auth";
 import React, { useState, FormEvent } from "react";
+import { z } from "zod";
 import { authClient } from "@/auth/auth-client";
-
+import { signUpSchema } from "@/features/auth/zod/schemas";
 // This is a placeholder for the Login page. You can replace this with your actual Login page content.
 export const Login = () => {
   // denne gjør at siden ikke refresher når skjemaet sendes inn
@@ -15,12 +16,24 @@ export const Login = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const [fieldErrors, setFieldErrors] = useState<
+    Record<string, string[] | undefined>
+  >({});
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-
+    const { signIn } = authClient;
+    const result = signUpSchema.safeParse({
+      email: email,
+      password: password,
+    });
+    if (!result.success) {
+      setFieldErrors(z.flattenError(result.error).fieldErrors);
+      return;
+    }
     setLoading(true);
-    const { error } = await authClient.signIn.email({
+    const { error } = await signIn.email({
       email,
       password,
     });
@@ -39,7 +52,7 @@ export const Login = () => {
       <h1>Login</h1>
       <p>Login page content goes here.</p>
       <form onSubmit={handleSubmit}>
-        {/* {state.fieldErrors?.username && <p>{state.fieldErrors.username}</p>} */}
+        {/* {fieldErrors?.username && <p>{fieldErrors.username.join(", ")}</p>} */}
         <br />
         <label htmlFor="email">Email:</label>
         <input
@@ -50,7 +63,7 @@ export const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        {/* {state.fieldErrors?.email && <p>{state.fieldErrors.email}</p>} */}
+        {fieldErrors?.email && <p>{fieldErrors.email.join(", ")}</p>}
         <br />
         <label htmlFor="password">Password:</label>
         <input
@@ -61,10 +74,12 @@ export const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {/* {state.fieldErrors?.password && <p>{state.fieldErrors.password}</p>} */}
+        {fieldErrors?.password && <p>{fieldErrors.password.join(", ")}</p>}
         <br />
-
-        <button type="submit">Login</button>
+        {error && <p>{error}</p>}
+        <button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Login"}
+        </button>
       </form>
     </>
   );
