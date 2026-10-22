@@ -1,4 +1,4 @@
-import { layout, render, route } from "rwsdk/router";
+import { layout, prefix, render, route } from "rwsdk/router";
 import { defineApp } from "rwsdk/worker";
 
 import { Document } from "@/app/document";
@@ -28,11 +28,20 @@ import { AppInfoLayout } from "./app/layouts/AppInfoLayout";
 import { auth } from "./auth/auth";
 import { authMiddleware } from "./auth/middleware";
 import { requireAdmin } from "./shared/lib/guards";
+
+import { realmRoutes } from "./features/realms/routes/realm-routes"; 
+
 export type AppContext = {};
 
 export default defineApp([
   setCommonHeaders(),
   authMiddleware,
+
+  prefix(
+    "api/v1/realms", [
+      ...realmRoutes,
+    ]
+  ),
 
   route("/api/auth/*", async ({ request }) => {
     return auth.handler(request);
