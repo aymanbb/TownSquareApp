@@ -28,10 +28,13 @@ import { AppInfoLayout } from "./app/layouts/AppInfoLayout";
 import { auth } from "./auth/auth";
 import { authMiddleware } from "./auth/middleware";
 import { requireAdmin } from "./shared/lib/guards";
-export type AppContext = {};
+export type AppContext = {
+  // user: SessionUser | null;
+};
 
 export default defineApp([
   setCommonHeaders(),
+  //setUser
   authMiddleware,
 
   route("/api/auth/*", async ({ request }) => {
