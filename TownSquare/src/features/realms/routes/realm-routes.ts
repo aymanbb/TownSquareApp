@@ -7,4 +7,14 @@ export const realmRoutes = [
         post: CreatePost,
         patch: EditPost,
     })
+
+    route("", {
+        get: GetAllRealms,
+        post: CreateNewRealm,
+    })
+
+    route("/:id/posts", {
+        //henter alle posts fra en realm
+        get: GetAllPosts,
+    })
 ]
