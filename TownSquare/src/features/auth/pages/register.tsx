@@ -1,3 +1,5 @@
+"use client";
+
 import Buffering from "@/features/global/components/Buffering";
 import { useState, FormEvent } from "react";
 import { z } from "zod";
