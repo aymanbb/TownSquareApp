@@ -7,8 +7,7 @@ export interface RealmsController {
   create(realmForm: Partial<Realm>): Promise<Response>;
 }
 
-export function createRealmsController(service: RealmsService): RealmsController {
-
+function createRealmsController(service: RealmsService): RealmsController {
   return {
     async list() {
         try {

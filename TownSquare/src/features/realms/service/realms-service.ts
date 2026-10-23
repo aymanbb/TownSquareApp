@@ -1,5 +1,5 @@
 import { Realm } from "../types/Realm";
-import { realmsRepository } from "../repository/realms-repository";
+import { realmsRepository, RealmsRepository } from "../repository/realms-repository";
 import { Result } from "../types/Result";
 
 export interface RealmsService {
@@ -7,16 +7,16 @@ export interface RealmsService {
   create(realmForm: Partial<Realm>): Promise<Result<Realm>>;
 }
 
-export function createRealmsService(repository: typeof realmsRepository): RealmsService {
+function createRealmsService(repository: RealmsRepository): RealmsService {
   return {
     async list() {
-      const realms = await realmsRepository.list();
+      const realms = await repository.list();
       return realms;
     },
 
     async create(realmForm: Partial<Realm>): Promise<Result<Realm>> {
       try {
-          const result = await realmsRepository.create(realmForm);
+          const result = await repository.create(realmForm);
           return result;
       }
       catch (e){

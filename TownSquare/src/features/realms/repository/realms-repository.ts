@@ -1,68 +1,63 @@
 import { Realm } from "../types/Realm";
 import { Result } from "../types/Result";
-
-const realms: Realm[] = [
-    {
-        id: 1,
-        name: "Realm 1",
-        description: "Cool realm",
-        ownerId: 3,
-        createdAt: "Yesterday",
-        //posts: Post[]
-    },
-    {
-        id: 2,
-        name: "Realm 2",
-        description: "Ok realm",
-        ownerId: 1,
-        createdAt: "Today",
-        //posts: Post[]
-    },
-    {
-        id: 3,
-        name: "Realm 3",
-        description: "Cool realm",
-        ownerId: 2,
-        createdAt: "Today",
-        //posts: Post[]
-    },
-]
+import { db } from "../../../db/index";
+import { realm } from "@/db/schema/realm-schema";
 
 export interface RealmsRepository {
-    //create: (realm: any) => Promise<any>;
     list: () => Promise<Realm[]>;
     create: (realm: Partial<Realm>) => Promise<Result<Realm>>;
 }
 
-export function createRealmsRepository(db: Realm[]): RealmsRepository {
+function mapRealmRow(row: {
+    id: number;
+    name: string;
+    description: string | null;
+    owner_id: string;
+    created_at: string;
+}): Realm {
+    return {
+        id: row.id,
+        name: row.name,
+        description: row.description ?? "",
+        ownerId: row.owner_id,
+        createdAt: row.created_at,
+    };
+}
+
+function createRealmsRepository(): RealmsRepository {
     return {
         list: async () => {
-            return db;
+            const rows = await db.select().from(realm).all();
+            console.log("ROWS: ", rows);
+            console.log(rows.map(mapRealmRow));
+            return rows.map(mapRealmRow);
         },
+
         create: async (realmForm) => {
             if (!realmForm.name || realmForm.ownerId == null) {
                 return {
                     success: false,
                     error: {
-                        message: "Name and ownerId are required." + realmForm,
+                        message: "Name and ownerId are required.",
                         code: 400,
                     },
                 };
             }
 
-            // for testing, når nye realm-en blir lagt inn i databasen så blir realm-ID ordnet av AUTO_INCREMENT
-            const lastRealm = db.at(-1);
-            const nextId = lastRealm ? lastRealm.id + 1 : 1;
+            const now = new Date().toISOString();
 
-            const newRealm : Realm = {
-                id: nextId,
-                name: realmForm.name,
-                description: realmForm.description ?? "",
-                ownerId: realmForm.ownerId,
-                createdAt: new Date().toISOString(),
-            };
+            const inserted = await db
+                .insert(realm)
+                .values({
+                    name: realmForm.name,
+                    description: realmForm.description ?? "",
+                    owner_id: String(realmForm.ownerId),
+                    created_at: now,
+                })
+                .returning()
+                .get();
 
-            db.push(newRealm);
+            const newRealm = mapRealmRow(inserted);
 
             return {
                 success: true,
@@ -70,7 +65,6 @@ export function createRealmsRepository(db: Realm[]): RealmsRepository {
             };
         },
     };
-}
+};
 
-export const realmsRepository = createRealmsRepository(realms);
-
+export const realmsRepository = createRealmsRepository();

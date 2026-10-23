@@ -28,6 +28,8 @@ import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
 import { auth } from "./auth/config/auth-config";
 import { authMiddleware } from "./auth/config/middleware";
 import { requireAdmin } from "../lib/guards";
+import { realmsController } from "./features/realms/controller/realms-controller";
+import { Realm } from "./features/realms/types/Realm";
 export type AppContext = {
   // user: SessionUser | null;
 };
@@ -36,6 +38,30 @@ export default defineApp([
   setCommonHeaders(),
   //setUser
   authMiddleware,
+
+  route("/api/realms/create", async ({ request }  ) => {
+    const realmForm: Partial<Realm> = await request.json();
+    return await realmsController.create(realmForm);
+  }),
+
+  route("/api/realms/list", async () => {
+    const realms = await realmsController.list();
+    if (realms && realms.length > 0) {
+      return new Response(JSON.stringify(realms), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } else {
+      return new Response( JSON.stringify(realms), {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+    }
+  }),
 
   route("/api/auth/*", async ({ request }) => {
     try {
