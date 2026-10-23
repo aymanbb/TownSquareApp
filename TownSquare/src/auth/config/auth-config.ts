@@ -1,4 +1,6 @@
-// src/auth/auth.ts
+// Kobler Better Auth til databasen og konfigurerer autentisering for applikasjonen.
+// Denne filen konfigurerer Better Auth for autentisering i applikasjonen.
+// src/auth/config/auth-config.ts
 import { env } from "cloudflare:workers";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -17,6 +19,9 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "sqlite" }),
   baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
+
+  logger: { level: "debug" }, // ← ny
+  onAPIError: { throw: true },
 
   emailAndPassword: {
     enabled: true,

@@ -1,6 +1,7 @@
+// Denne filen definerer middleware for autentisering ved hjelp av Better Auth.
 // src/auth/middleware.ts
 import type { RouteMiddleware } from "rwsdk/router";
-import { auth, type Session } from "@/auth/auth";
+import { auth, type Session } from "@/auth/config/auth-config";
 import { ErrorResponse } from "rwsdk/worker";
 
 declare module "rwsdk/worker" {

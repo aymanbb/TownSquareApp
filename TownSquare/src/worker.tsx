@@ -9,8 +9,8 @@ import { AppLayout } from "@/app/layouts/AppLayout";
 
 // Pages
 import { Home } from "@/app/pages";
-import { Login } from "@/app/pages/login";
-import { Register } from "@/app/pages/register";
+import { Login } from "@/features/auth/pages/login";
+import { Register } from "@/features/auth/pages/register";
 
 import { Leaderboard } from "@/app/pages/leaderboard";
 import { User } from "@/app/pages/user";
@@ -18,25 +18,38 @@ import { Realms } from "@/app/pages/realm/realms";
 import { RealmPage } from "@/app/pages/realm/realmPage";
 import { RealmPostPage } from "@/app/pages/realm/realmPostPage";
 
-import { AdminDashboardPage } from "./features/auth/components/AdminDashBoardPage";
+import { AdminDashboardPage } from "@/features/auth/components/AdminDashBoardPage";
 
 import { About } from "@/app/pages/about";
 import { Settings } from "@/app/pages/settings";
 import { Support } from "@/app/pages/support";
-import { AuthLayout } from "./app/layouts/AuthLayout";
-import { AppInfoLayout } from "./app/layouts/AppInfoLayout";
-import { auth } from "./auth/auth";
-import { authMiddleware } from "./auth/middleware";
-import { requireAdmin } from "./shared/lib/guards";
-export type AppContext = {};
+import { AuthLayout } from "@/app/layouts/AuthLayout";
+import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
+import { auth } from "./auth/config/auth-config";
+import { authMiddleware } from "./auth/config/middleware";
+import { requireAdmin } from "../lib/guards";
+export type AppContext = {
+  // user: SessionUser | null;
+};
 
 export default defineApp([
   setCommonHeaders(),
+  //setUser
   authMiddleware,
 
   route("/api/auth/*", async ({ request }) => {
-    return auth.handler(request);
+    try {
+      const res = await auth.handler(request);
+      if (res.status >= 500)
+        console.error("AUTH 500:", await res.clone().text());
+      return res;
+    } catch (e) {
+      console.error("AUTH CRASH:", e);
+      console.error("CAUSE:", (e as any)?.cause);
+      throw e;
+    }
   }),
+
   route("/admin", [
     () => {
       requireAdmin();
