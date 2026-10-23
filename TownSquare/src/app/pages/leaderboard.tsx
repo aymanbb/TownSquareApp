@@ -1,14 +1,6 @@
 import type { CSSProperties } from "react";
-import { createDummyUserRepo } from "@/features/auth/repository/dummyUserRepo";
+import { userController } from "@/features/auth/controller/auth-controller";
 import type { User } from "@/features/auth/types/User";
-
-const db = createDummyUserRepo();
-
-const sortByLevel = async () => {
-  const users = await db.list();
-
-  return [...users].sort((a, b) => b.level - a.level);
-};
 
 type UserProp = {
   user: User;
@@ -46,7 +38,7 @@ const UserCard = ({ user, rankedSpot }: UserProp) => {
 };
 
 export const Leaderboard = async () => {
-  const usersByLevel = await sortByLevel();
+  const usersByLevel = await userController.sortByLevel();
 
   return (
     <main style={styles.leaderboard}>
