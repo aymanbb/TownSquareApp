@@ -1,4 +1,4 @@
-import {Post} from "../types/Post";
+import { Post } from "../types/Post";
 import { db } from "@/db";
 import { post } from "@/db/schema/post-schema";
 export interface IpostRepository {
@@ -23,26 +23,27 @@ const toPost = (row: PostRow): Post => ({
   dislikes: row.dislikes,
 });
 
-export function createPostRepository(_db : typeof db): IpostRepository {
+export function createPostRepository(_db: typeof db): IpostRepository {
   // Implementation goes here
   return {
     create: async (value: Post) => {
       throw new Error("Not implemented");
     },
     remove: async (id: number) => {
-      return await _db.delete(post).where({ post.id });
+      throw new Error("Not implemented");
     },
     update: async (id: number, post: Post) => {
-      return await _db.update(post).set(post).where({ post.id });
+      throw new Error("Not implemented");
     },
     get: async (id: number) => {
-      return await _db.select().from(post).where({ post.id }).get();
+      throw new Error("Not implemented");
     },
     list: async () => {
-      return await _db.select().from(post).all();
+      const rows = await _db.select().from(post).all();
+      return rows.map(toPost);
     },
     listByRealm: async (realmId: number) => {
-      return await _db.select().from(post).where({ post.realmId }).all();
-    }
+      throw new Error("Not implemented");
+    },
   };
 }
