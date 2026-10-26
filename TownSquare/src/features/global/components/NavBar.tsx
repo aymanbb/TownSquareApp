@@ -18,7 +18,7 @@ export const NavBar = () => {
         <li className="w-44">
           <a
             href="/"
-            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50"
+            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50 font-['MinecraftiaRegular']"
           >
             <img
               src="/assets/icons/svg/HomeIcon.svg"
@@ -31,7 +31,7 @@ export const NavBar = () => {
         <li className="w-44">
           <a
             href="/realms"
-            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50"
+            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50 font-['MinecraftiaRegular']"
           >
             <img
               src="/assets/icons/svg/CompassIcon.svg"
@@ -44,7 +44,7 @@ export const NavBar = () => {
         <li className="w-44">
           <a
             href="/leaderboard"
-            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50"
+            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50 font-['MinecraftiaRegular']"
           >
             <img
               src="/assets/icons/svg/TrophyIcon.svg"
@@ -67,8 +67,20 @@ export const NavBar = () => {
           type="search"
           id="search"
           className="rounded border border-gray-300 px-2 py-1 text-white bg-gray-700"
+          placeholder="Seek the Realm..."
         />
-        <button type="submit" className="rounded bg-black px-3 py-1 text-white">
+        <button
+          type="submit"
+          className="rounded px-3 py-1 text-white
+    bg-gray-500 bg-cover [image-rendering:pixelated]
+    font-['MinecraftiaRegular']
+    border-2 border-t-[#AAA] border-l-[#AAA] border-r-[#565656] border-b-[#565656]
+    text-shadow-[3px_3px_#4C4C4C]
+    outline-2 outline-solid outline-black
+    px-4 py-2 text-white
+    hover:bg-blue-400/50
+  "
+        >
           Search
         </button>
       </form>

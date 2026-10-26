@@ -13,7 +13,14 @@ export const RealmSideBar = () => {
       <button
         type="button"
         onClick={() => console.log("Create realm")}
-        className="w-full bg-blue-200 px-2 py-2 text-sm hover:bg-neutral-100"
+        className="w-full rounded px-3 py-1 text-white
+    bg-gray-500 bg-cover [image-rendering:pixelated]
+    font-['MinecraftiaRegular']
+    border-2 border-t-[#AAA] border-l-[#AAA] border-r-[#565656] border-b-[#565656]
+    text-shadow-[3px_3px_#4C4C4C]
+    outline-2 outline-solid outline-black
+    px-4 py-2 text-white
+    hover:bg-blue-400"
       >
         Create new realm
       </button>
