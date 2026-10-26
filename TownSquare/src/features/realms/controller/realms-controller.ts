@@ -3,7 +3,7 @@ import { realmsService, RealmsService } from "../service/realms-service";
 import { Result } from "../types/Result";
 
 export interface RealmsController {
-  list(): Promise<Realm[] | undefined>;
+  list(): Promise<Response>;
   create(realmForm: Partial<Realm>): Promise<Response>;
 }
 
@@ -11,14 +11,35 @@ function createRealmsController(service: RealmsService): RealmsController {
   return {
     async list() {
         try {
-            const realmsList = await realmsService.list();
-            if (realmsList.length === 0) {
-                return [];
-            }
-            return realmsList;
-        }
+          const realmsList = await realmsService.list();
+          
+          const result: Result<Realm[]> = {
+            success: true,
+            data: realmsList,
+          };
+
+          return new Response(JSON.stringify(result), {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json"
+            },
+          });
+        } 
         catch(e) {
-            console.log(e);
+          console.log(e);
+
+          const errorResult: Result<Realm[]> = {
+            success: false,
+            error: {
+              message: "Oops, something went wrong (controller.list)",
+              code: 500,
+            },
+          };
+
+          return new Response(JSON.stringify(errorResult), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          });
         }
     },
 
@@ -30,35 +51,38 @@ function createRealmsController(service: RealmsService): RealmsController {
       try {
         const result = await realmsService.create(realmForm)
 
-        if (result !== undefined && !result.success) {
-          const { error } = result;
-          const { message, code } = error;
+        if (result && !result.success) {
+          const { message, code } = result.error;
           return new Response(JSON.stringify({ error: message }), {
             status: code || 500,
             headers: { "Content-Type": "application/json" },
-          })
+          });
         }
 
         return new Response(JSON.stringify(result), {
-          status: 200,
+          status: 201,
           headers: { "Content-Type": "application/json" },
         })
       }
       catch (error) {
         console.error(error);
 
-        return new Response(
-          JSON.stringify({
-            error: "Oops, something went wrong. Please try again later."
-          }),
-          {
-            status: 500,
-            headers: { "Content-Type": "application/json" },
-          }
-        )
+        const errorResult: Result<Realm> = {
+          success: false,
+          error: {
+            message:
+              "Oops, something went wrong. (controller.create)",
+            code: 500,
+          },
+        };
+
+        return new Response(JSON.stringify(errorResult), {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        });
       }
-    }
-  }
+    },
+  };
 }
 
 export const realmsController = createRealmsController(realmsService);

@@ -2,18 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { Realm } from "@/features/realms/types/Realm";
-import { realmsService } from "@/features/realms/service/realms-service";
-import { Result, ResultData } from "@/features/realms/types/Result";
-
-/*
-type RealmProps = {
-  realms: Realm[]
-};
-*/
+import { listRealms, createRealm } from "@/features/realms/realms-api";
+import { Result } from "@/features/realms/types/Result";
 
 // This is a placeholder for the Realms page. You can replace this with your actual Realms page content.
 export const Realms = () => {
-  const [data, setData] = useState<Realm[]>([]);
+  const [realms, setRealms] = useState<Realm[]>([]);
+  const [error, setError] = useState<String | null>(null);
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -21,15 +16,15 @@ export const Realms = () => {
 
   useEffect(() => {
     async function loadRealms() {
-      try {
-        const realmsList = await realmsService.list();
-        setData(realmsList);
-      } 
-      finally {
-        if (data?.length === 0) {
-          return;
-        }
+      const result = await listRealms();
+      console.log("listRealms raw result: ", result);
+
+      if (!result.success) {
+        console.error("listRealms error: ", result.error.message);
+        setError(result.error.message);
+        return;
       }
+      setRealms(Array.isArray(result.data) ? result.data : []);
     }
     loadRealms();
   }, []);
@@ -50,70 +45,44 @@ export const Realms = () => {
     const newRealm: Partial<Realm> = {
       name: name,
       description: desc,
-      ownerId: Number(ownerId),
+      ownerId: ownerId,
     }
 
     try {
-      const response = await fetch("/api/realms/create", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newRealm),
-      });
+      const result: Result<Realm> = await createRealm(newRealm);
 
-      console.log("Response status:", response.status);
+      console.log("Result status:", result.success);
 
-      const body: Result<Realm> = await response.json();
-
-      if (!response.ok) {
-        console.log("HTTP error: ", response.status);
-        console.log("Body: ", body);
+      if (!result.success) {
+        console.log("HTTP error: ", result.error.code);
+        console.log("message: ", result.error.message);
         return;
       }
 
-      if (!body.success) {
-        console.log("Something went wrong.");
-        console.log("Error: ", body.error.message);
-        return;
-      }
-
-      if (body.data !== undefined) {
-        const id: number = body.data.id;
-        const name: string = body.data.name;
-        const description: string = body.data.description;
-        const ownerId: number = body.data.ownerId;
-        const createdAt: string = body.data.createdAt;
-        const updatedAt: string | undefined = body.data.updatedAt;
-
-        const createdRealm: Realm = {
-          id: id,
-          name: name,
-          description: description,
-          ownerId: ownerId,
-          createdAt: createdAt,
-          updatedAt: updatedAt,
-        }
-
+      if (result.data) {
+        const createdRealm = result.data;
 
         console.log("Success!");
         console.log("Created realm: ", createdRealm);
 
-        setData(prev => (prev ? [...prev, createdRealm] : [createdRealm]));
+        setRealms((prev) => [...prev, createdRealm]);
       }
-
     } catch (e) {
       console.error(e);
+      setError("Unexpected error during realm creation");
     }
   }
 
   return (
     <>
       <h1>Realms</h1>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
       <ul>
-        {data.map((realm) => (
+        {realms.map((realm) => (
           <li key={realm.id}>
-            Name: {realm.name} - 
+            Name: {realm.name} -
             Description: {realm.description} - 
             Created at: {realm.createdAt} - 
             Owner ID: {realm.ownerId}

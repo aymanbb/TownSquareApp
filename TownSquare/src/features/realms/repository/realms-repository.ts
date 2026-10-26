@@ -1,6 +1,6 @@
 import { Realm } from "../types/Realm";
 import { Result } from "../types/Result";
-import { db } from "../../../db/index";
+import { db } from "@/db";
 import { realm } from "@/db/schema/realm-schema";
 
 export interface RealmsRepository {
