@@ -1,7 +1,9 @@
 import { Post } from "../types/Post";
 import { db } from "@/db";
 import { post } from "@/db/schema/post-schema";
-export interface IpostRepository {
+import { eq } from "drizzle-orm";
+
+export interface IPostRepository {
   create: (post: Post) => Promise<any>;
   remove: (id: number) => Promise<any>;
   update: (id: number, post: Post) => Promise<any>;
@@ -23,7 +25,7 @@ const toPost = (row: PostRow): Post => ({
   dislikes: row.dislikes,
 });
 
-export function createPostRepository(_db: typeof db): IpostRepository {
+export function createPostRepository(_db: typeof db): IPostRepository {
   // Implementation goes here
   return {
     create: async (value: Post) => {
@@ -36,14 +38,28 @@ export function createPostRepository(_db: typeof db): IpostRepository {
       throw new Error("Not implemented");
     },
     get: async (id: number) => {
-      throw new Error("Not implemented");
+      // henter ut en post fra databasen basert på id
+      const row = await _db.select().from(post).where(eq(post.id, id)).get();
+      if (!row) {
+        throw new Error(`Post with id ${id} not found`);
+      }
+      return toPost(row);
     },
     list: async () => {
+      // henter ut alle poster fra databasen og konverterer dem til Post-objekter
       const rows = await _db.select().from(post).all();
       return rows.map(toPost);
     },
     listByRealm: async (realmId: number) => {
-      throw new Error("Not implemented");
+      // henter ut alle poster fra databasen som tilhører det spesifikke realmId
+      const rows = await _db
+        .select()
+        .from(post)
+        .where(eq(post.realm_id, realmId))
+        .all();
+      return rows.map(toPost);
     },
   };
 }
+
+export const postRepository = createPostRepository(db);

@@ -28,6 +28,9 @@ import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
 import { auth } from "./auth/config/auth-config";
 import { authMiddleware } from "./auth/config/middleware";
 import { requireAdmin } from "../lib/guards";
+
+//api endpoints
+import { postRoutes } from "@/features/posts/routes/post-routes";
 export type AppContext = {
   // user: SessionUser | null;
 };
@@ -69,6 +72,7 @@ export default defineApp([
   */
 
   // Routes
+  ...postRoutes,
   // index page
   render(Document, [
     layout(AuthLayout, [route("/login", Login), route("/register", Register)]),

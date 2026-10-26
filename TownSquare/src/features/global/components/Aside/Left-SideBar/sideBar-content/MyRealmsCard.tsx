@@ -6,7 +6,7 @@ type MyRealmsCardProps = {
 };
 
 export const MyRealmsCard = ({ communityName, index }: MyRealmsCardProps) => {
-  console.log(communityName);
+  //console.log(communityName);
   return (
     <li key={communityName + index}>
       <text className="font-['Almendra'] text-base text-yellow-400 hover:text-white">
