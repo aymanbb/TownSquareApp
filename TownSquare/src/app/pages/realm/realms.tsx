@@ -4,15 +4,18 @@ import React, { useEffect, useState } from "react";
 import { Realm } from "@/features/realms/types/Realm";
 import { listRealms, createRealm } from "@/features/realms/realms-api";
 import { Result } from "@/features/realms/types/Result";
+import { authClient } from "@/auth/config/auth-client";
 
 // This is a placeholder for the Realms page. You can replace this with your actual Realms page content.
 export const Realms = () => {
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+
   const [realms, setRealms] = useState<Realm[]>([]);
   const [error, setError] = useState<String | null>(null);
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
-  const [ownerId, setOwnerId] = useState("");
 
   useEffect(() => {
     async function loadRealms() {
@@ -32,20 +35,20 @@ export const Realms = () => {
   async function handleCreate(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!name.trim() || !desc.trim() || !ownerId.trim()) {
+    if (!name.trim() || !desc.trim()) {
       console.log("All fields must be filled out before submitting!");
       return;
     }
 
-    if (Number.isNaN(Number(ownerId))) {
-      console.log("Owner ID must be a number!")
+    if (!user) {
+      console.log("You must be logged in to create a realm!");
       return;
     }
 
     const newRealm: Partial<Realm> = {
       name: name,
       description: desc,
-      ownerId: ownerId,
+      ownerId: user.id,
     }
 
     try {
@@ -85,7 +88,6 @@ export const Realms = () => {
             Name: {realm.name} -
             Description: {realm.description} - 
             Created at: {realm.createdAt} - 
-            Owner ID: {realm.ownerId}
           </li>
         ))}
       </ul>
@@ -111,18 +113,6 @@ export const Realms = () => {
             placeholder="Skriv beskrivelsen til ditt nye realm her" 
             value={desc} 
             onChange={(e) => setDesc(e.target.value)}
-            style={{ margin: "10px", backgroundColor: "violet" }}
-        />
-
-        <label htmlFor="realmOwnerId">
-          Eier-ID
-        </label>
-        <input 
-            type="text" 
-            id="realmOwnerId" 
-            placeholder="Skriv eier-ID til ditt nye realm her" 
-            value={ownerId} 
-            onChange={(e) => setOwnerId(e.target.value)}
             style={{ margin: "10px", backgroundColor: "violet" }}
         />
         <input type="submit" value="Submit" />

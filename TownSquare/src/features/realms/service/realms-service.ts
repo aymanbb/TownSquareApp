@@ -3,33 +3,48 @@ import { realmsRepository, RealmsRepository } from "../repository/realms-reposit
 import { Result } from "../types/Result";
 
 export interface RealmsService {
-  list():  Promise<Realm[]>;
+  list():  Promise<Result<Realm[]>>;
   create(realmForm: Partial<Realm>): Promise<Result<Realm>>;
 }
 
-function createRealmsService(repository: RealmsRepository): RealmsService {
+function createRealmsService(_repository: RealmsRepository): RealmsService {
   return {
     async list() {
-      const realms = await repository.list();
-      return realms;
-    },
-
-    async create(realmForm: Partial<Realm>): Promise<Result<Realm>> {
       try {
-          const result = await repository.create(realmForm);
-          return result;
-      }
-      catch (e){
-        console.error(e);
+        const realms = await _repository.list();
+        return { success: true, data: realms };
+      } catch (e: any) {
+        console.error("Service error (list): ", e);
         return {
           success: false,
           error: {
-            message: "Oops, something went wrong (service)",
+            message: "Failed to list realms",
             code: 500,
-          }
-        }
+          },
+        };
       }
-    }
+    },
+
+    async create(_realmForm: Partial<Realm>): Promise<Result<Realm>> {
+      try {
+          const realm = await _repository.create(_realmForm);
+          return { success: true, data: realm };
+      }
+      catch (e){
+        console.error("Service error (create): ", e);
+        
+        const message = e instanceof Error ? e.message : "Failed to create realm";
+        const isValidationError = message === "Name is required.";
+
+        return {
+          success: false,
+          error: {
+            message,
+            code: isValidationError ? 400 : 500,
+          },
+        };
+      }
+    },
   };
 }
 
