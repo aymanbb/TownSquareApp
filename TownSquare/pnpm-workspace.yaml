@@ -5,3 +5,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+patchedDependencies:
+  rwsdk@1.7.3: patches/rwsdk@1.7.3.patch

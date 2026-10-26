@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1791985706984,
-      "tag": "0000_gifted_starbolt",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1792000024129,
-      "tag": "0001_deep_ma_gnuci",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1792004187529,
-      "tag": "0002_kind_captain_cross",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1792683768818,
-      "tag": "0003_skinny_jackpot",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1792683941791,
-      "tag": "0004_normal_starhawk",
+      "when": 1793042409904,
+      "tag": "0000_bored_hemingway",
       "breakpoints": true
     }
   ]

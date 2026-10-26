@@ -7,6 +7,7 @@ import {
 import { user } from "./auth";
 import { post } from "./post-schema";
 import { relations } from "drizzle-orm/relations";
+import { sql } from "drizzle-orm";
 
 export const comment = sqliteTable("comment", {
   id: int("id").primaryKey({ autoIncrement: true }).notNull(),
@@ -24,7 +25,7 @@ export const comment = sqliteTable("comment", {
   post_id: int("post_id")
     .notNull()
     .references(() => post.id, { onDelete: "cascade" }),
-  created_at: text("created_at").notNull().default(new Date().toISOString()),
+  created_at: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
 });
 
 export const commentRelations = relations(comment, ({ one }) => ({

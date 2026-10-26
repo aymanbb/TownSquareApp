@@ -1,6 +1,6 @@
 import { sqliteTable, text, int, SQLiteColumn } from "drizzle-orm/sqlite-core";
 import { user } from "./auth";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
 export const realm = sqliteTable("realm", {
   id: int("id").primaryKey(),
@@ -9,7 +9,7 @@ export const realm = sqliteTable("realm", {
   owner_id: text("owner_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  created_at: text("created_at").notNull().default(new Date().toISOString()),
+  created_at: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
 });
 
 // Koblingstabell mellom brukere og realm
@@ -21,7 +21,7 @@ export const userFollowsRealm = sqliteTable("user_follows_realm", {
   realm_id: text("realm_id")
     .notNull()
     .references(() => realm.id, { onDelete: "cascade" }),
-  created_at: text("created_at").notNull().default(new Date().toISOString()),
+  created_at: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
 });
 
 // Relasjoner for realm
@@ -51,12 +51,3 @@ export const userFollowsRealmRelations = relations(
     }),
   }),
 );
-
-// Relasjoner for user
-export const userRelations = relations(user, ({ many }) => ({
-  // En bruker kan eie mange realms
-  realms: many(realm),
-
-  // En bruker kan følge mange realms
-  follows: many(userFollowsRealm),
-}));

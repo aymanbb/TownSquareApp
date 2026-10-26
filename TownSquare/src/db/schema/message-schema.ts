@@ -1,6 +1,6 @@
 import { sqliteTable, text, int } from "drizzle-orm/sqlite-core";
 import { user } from "./auth";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
 export const message = sqliteTable("message", {
   id: int("id").primaryKey({ autoIncrement: true }).notNull(),
@@ -11,7 +11,7 @@ export const message = sqliteTable("message", {
   to: text("to_user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  created_at: text("created_at").notNull().default(new Date().toISOString()),
+  created_at: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
 });
 
 // En melding har en avsender og en mottaker, begge er brukere.

@@ -2,6 +2,7 @@ import { sqliteTable, text, int } from "drizzle-orm/sqlite-core";
 import { user } from "./auth";
 import { realm } from "./realm-schema";
 import { relations } from "drizzle-orm/relations";
+import { sql } from "drizzle-orm";
 import { comment } from "./comment-schema";
 
 export const post = sqliteTable("posts", {
@@ -16,7 +17,7 @@ export const post = sqliteTable("posts", {
   content: text("content"),
   likes: int("likes").notNull().default(0),
   dislikes: int("dislikes").notNull().default(0),
-  created_at: text("created_at").notNull().default(new Date().toISOString()),
+  created_at: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
 });
 
 // Koblingstabeller for å holde styr på hvilke brukere som liker eller misliker hvilke innlegg

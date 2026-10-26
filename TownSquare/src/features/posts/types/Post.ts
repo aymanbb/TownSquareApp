@@ -1,12 +1,12 @@
 export type Post = {
-  id: string;
+  id: number;
+  authorId: string;
+  realmId: number;
   title: string;
   content: string;
-  authorId: string;
-  realmId: string;
   createdAt: string;
-  updatedAt: string;
   likes: number;
-  comments: Comment[];
-  commentsCount: number;
+  dislikes: number;
+  comments?: Comment[];
+  commentsCount?: number;
 };

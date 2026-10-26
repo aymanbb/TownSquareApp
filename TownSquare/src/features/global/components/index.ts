@@ -2,4 +2,4 @@
 export { Header } from "./Header";
 export { Footer } from "./Footer/Footer";
 export { NavBar } from "./NavBar";
-export { SideBar } from "./Aside/Left-SideBar/RealmSideBar";
+export { RealmSideBar } from "./Aside/Left-SideBar/RealmSideBar";

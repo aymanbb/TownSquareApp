@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  rwsdk@1.7.3: ccccbd9d51a5bcf17f36bcb7a3ca8fca20cd58b7dac020bce6e950e5d76bd7ac
+
 importers:
 
   .:
@@ -34,7 +37,7 @@ importers:
         version: 19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(webpack@5.111.1(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.28)(sharp@0.35.5(@types/node@26.1.2)))
       rwsdk:
         specifier: 1.7.3
-        version: 1.7.3(@cloudflare/vite-plugin@1.64.0(@types/node@26.1.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2)))(react-dom@19.2.8(react@19.2.8))(react-server-dom-webpack@19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(webpack@5.111.1(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.28)(sharp@0.35.5(@types/node@26.1.2))))(react@19.2.8)(supports-color@10.2.2)(typescript@7.0.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2))(yauzl@3.4.0)
+        version: 1.7.3(patch_hash=ccccbd9d51a5bcf17f36bcb7a3ca8fca20cd58b7dac020bce6e950e5d76bd7ac)(@cloudflare/vite-plugin@1.64.0(@types/node@26.1.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2)))(react-dom@19.2.8(react@19.2.8))(react-server-dom-webpack@19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(webpack@5.111.1(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.28)(sharp@0.35.5(@types/node@26.1.2))))(react@19.2.8)(supports-color@10.2.2)(typescript@7.0.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2))(yauzl@3.4.0)
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -5511,7 +5514,7 @@ snapshots:
 
   rsc-html-stream@0.0.8: {}
 
-  rwsdk@1.7.3(@cloudflare/vite-plugin@1.64.0(@types/node@26.1.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2)))(react-dom@19.2.8(react@19.2.8))(react-server-dom-webpack@19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(webpack@5.111.1(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.28)(sharp@0.35.5(@types/node@26.1.2))))(react@19.2.8)(supports-color@10.2.2)(typescript@7.0.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2))(yauzl@3.4.0):
+  rwsdk@1.7.3(patch_hash=ccccbd9d51a5bcf17f36bcb7a3ca8fca20cd58b7dac020bce6e950e5d76bd7ac)(@cloudflare/vite-plugin@1.64.0(@types/node@26.1.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2)))(react-dom@19.2.8(react@19.2.8))(react-server-dom-webpack@19.2.8(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(webpack@5.111.1(esbuild@0.28.1)(lightningcss@1.33.0)(postcss@8.5.28)(sharp@0.35.5(@types/node@26.1.2))))(react@19.2.8)(supports-color@10.2.2)(typescript@7.0.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2))(yauzl@3.4.0):
     dependencies:
       '@ast-grep/napi': 0.45.3
       '@cloudflare/vite-plugin': 1.64.0(@types/node@26.1.2)(vite@8.2.2(@types/node@26.1.2)(esbuild@0.28.1)(jiti@2.7.0)(terser@5.51.2)(tsx@4.23.15))(wrangler@4.151.3(@cloudflare/workers-types@5.20260801.1)(@types/node@26.1.2))
