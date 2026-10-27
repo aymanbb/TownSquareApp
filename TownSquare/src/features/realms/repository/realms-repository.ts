@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 
 export interface RealmsRepository {
     list: () => Promise<Realm[]>;
+    get: (_id: number) => Promise<Realm>;
     create: (realm: Partial<Realm>) => Promise<Realm>;
 }
 
@@ -36,6 +37,21 @@ function createRealmsRepository(): RealmsRepository {
                 return rows.map(mapRealmRow);
             } catch (e) {
                 console.error("Repository error (list): ", e);
+                throw e;
+            }
+        },
+
+        get: async (_id) => {
+            try {
+                const row = await db.select().from(realm).where(eq(realm.id, _id)).get();
+
+                if (!row) {
+                    throw new Error("Couldn't retrieve row from db")
+                }
+
+                return mapRealmRow(row);
+            } catch (e) {
+                console.error("Repository error (get): ", e);
                 throw e;
             }
         },

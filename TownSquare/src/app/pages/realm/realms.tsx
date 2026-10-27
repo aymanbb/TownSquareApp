@@ -6,7 +6,6 @@ import { listRealms, createRealm } from "@/features/realms/realms-api";
 import { Result } from "@/features/realms/types/Result";
 import { authClient } from "@/auth/config/auth-client";
 
-// This is a placeholder for the Realms page. You can replace this with your actual Realms page content.
 export const Realms = () => {
   const { data: session } = authClient.useSession();
   const user = session?.user;

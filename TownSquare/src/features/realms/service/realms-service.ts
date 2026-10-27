@@ -3,8 +3,9 @@ import { realmsRepository, RealmsRepository } from "../repository/realms-reposit
 import { Result } from "../types/Result";
 
 export interface RealmsService {
-  list():  Promise<Result<Realm[]>>;
-  create(realmForm: Partial<Realm>): Promise<Result<Realm>>;
+  list(): Promise<Result<Realm[]>>;
+  get(_id: number): Promise<Result<Realm>>;
+  create(_realmForm: Partial<Realm>): Promise<Result<Realm>>;
 }
 
 function createRealmsService(_repository: RealmsRepository): RealmsService {
@@ -22,6 +23,30 @@ function createRealmsService(_repository: RealmsRepository): RealmsService {
             code: 500,
           },
         };
+      }
+    },
+
+    async get(_id: number) {
+      try {
+        if (Number.isNaN(_id)) {
+          throw new Error("ID must be a number.");
+        }
+
+        const result = await _repository.get(_id);
+        return { success: true, data: result };
+      } catch (e) {
+        console.error("Service error (get): ", e);
+        
+        const message = e instanceof Error ? e.message : "Failed to fetch realm";
+        const isValidationError = message === "ID must be a number."
+
+        return {
+          success: false,
+          error: {
+            message,
+            code: isValidationError ? 400 : 500,
+          }
+        }
       }
     },
 

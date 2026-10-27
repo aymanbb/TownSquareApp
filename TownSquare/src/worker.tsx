@@ -48,6 +48,11 @@ export default defineApp([
     return realmsController.list();
   }),
 
+  route("/api/v1/realms/:realmId", async ({ params }) => {
+    //const id: number = await request.json();
+    return realmsController.get(Number(params.realmId));
+  }),
+
   route("/api/auth/*", async ({ request }) => {
     try {
       const res = await auth.handler(request);

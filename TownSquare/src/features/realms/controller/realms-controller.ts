@@ -4,6 +4,7 @@ import { Result } from "../types/Result";
 
 export interface RealmsController {
   list(): Promise<Response>;
+  get(_id: number): Promise<Response>;
   create(_realmForm: Partial<Realm>): Promise<Response>;
 }
 
@@ -16,6 +17,15 @@ function createRealmsController(_service: RealmsService): RealmsController {
         status: result.success ? 200 : result.error.code,
         headers: { "Content-Type": "application/json" },
       }); 
+    },
+
+    async get(_id) {
+      const result = await _service.get(_id);
+
+      return new Response(JSON.stringify(result), {
+        status: result.success ? 200 : result.error.code,
+        headers: { "Content-Type": "application/json" },
+      });
     },
 
     async create(_realmForm) {
