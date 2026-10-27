@@ -1,65 +1,61 @@
 import type { CSSProperties } from "react";
-import { userController } from "@/features/auth/controller/auth-controller";
+import { userService } from "@/features/auth/service/user-service";
 import type { User } from "@/features/auth/types/User";
 
 type UserProp = {
-  user: User;
+  user: Partial<User>;
   rankedSpot: number;
 };
 
+const formatDate = (value: unknown) =>
+  value ? new Date(value as string | Date).toLocaleDateString() : "Unknown";
+
 const UserCard = ({ user, rankedSpot }: UserProp) => {
+  const name = user.name ?? "unknown";
+
   return (
     <div style={styles.userCard}>
       <div style={styles.rank}>#{rankedSpot}</div>
 
       <img
-        src={"/assets/icons/svg/UserIcon.svg"}
-        alt={`${user.username}'s avatar`}
+        src="/assets/icons/svg/UserIcon.svg"
+        alt={`${name}'s avatar`}
         style={styles.avatar}
       />
 
       <div style={styles.userInfo}>
-        <h2 style={styles.displayName}>{user.displayName ?? user.username}</h2>
-
-        <p style={styles.username}>@{user.username}</p>
-
+        <h2 style={styles.displayName}>{user.displayName ?? name}</h2>
+        <p style={styles.username}>@{name}</p>
         {user.bio && <p style={styles.bio}>{user.bio}</p>}
-
-        <p style={styles.joined}>Joined: {user.createdAt}</p>
+        <p style={styles.joined}>Joined: {formatDate(user.createdAt)}</p>
       </div>
 
       <div style={styles.level}>
         <span style={styles.levelLabel}>LEVEL</span>
-
-        <strong style={styles.levelNumber}>{user.level}</strong>
+        <strong style={styles.levelNumber}>{user.level ?? 0}</strong>
       </div>
     </div>
   );
 };
 
-export const Leaderboard = async () => {
-  const usersByLevel = await userController.sortByLevel();
+export default async function Leaderboard() {
+  const usersByLevel = await userService.sortByLevel();
 
   return (
     <main style={styles.leaderboard}>
       <h1>Leaderboard</h1>
-
       <p style={styles.description}>Top community members ranked by level</p>
 
       <ul style={styles.list}>
         {usersByLevel.map((user, index) => (
-          <li key={user.id}>
+          <li key={user.id ?? index}>
             <UserCard user={user} rankedSpot={index + 1} />
           </li>
         ))}
       </ul>
     </main>
   );
-};
-
-/*
- * Styling
- */
+}
 
 const styles: Record<string, CSSProperties> = {
   leaderboard: {

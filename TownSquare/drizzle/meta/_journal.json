@@ -8,6 +8,13 @@
       "when": 1793042409904,
       "tag": "0000_bored_hemingway",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1793107232428,
+      "tag": "0001_nappy_thing",
+      "breakpoints": true
     }
   ]
 }

@@ -31,6 +31,7 @@ import { requireAdmin } from "../lib/guards";
 
 //api endpoints
 import { postRoutes } from "@/features/posts/routes/post-routes";
+import { userRoutes } from "@/features/auth/routes/user-routes";
 export type AppContext = {
   // user: SessionUser | null;
 };
@@ -71,8 +72,9 @@ export default defineApp([
     The `render` function is used to render the component within the `Document` layout.
   */
 
-  // Routes
+  // Routes/ API-endepunkter
   ...postRoutes,
+  ...userRoutes,
   // index page
   render(Document, [
     layout(AuthLayout, [route("/login", Login), route("/register", Register)]),
@@ -91,11 +93,11 @@ export default defineApp([
           postId={String(params.postId ?? "")}
         />
       )),
+      route("/leaderboard", Leaderboard),
       route("/settings", Settings),
       route("/user/:userId", ({ params }) => (
         <User userId={String(params.userId ?? "")} />
       )),
-      route("/leaderboard", Leaderboard),
     ]),
   ]),
 ]);

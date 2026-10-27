@@ -16,18 +16,21 @@ const testUsers = [
     email: "jorgen@example.com",
     password: "passord123",
     role: "admin",
+    level: 10,
   },
   {
     name: "ayman",
     email: "ayman@example.com",
     password: "passord123",
     role: "user",
+    level: 1,
   },
   {
     name: "sarah",
     email: "sarah@example.com",
     password: "passord123",
     role: "user",
+    level: 1,
   },
 ];
 
@@ -48,7 +51,11 @@ export default defineScript(async () => {
     }
 
     const { user: created } = await auth.api.signUpEmail({
-      body: { name: u.name, email: u.email, password: u.password },
+      body: {
+        name: u.name,
+        email: u.email,
+        password: u.password,
+      },
     });
     userIds[u.name] = created.id;
 
@@ -59,13 +66,19 @@ export default defineScript(async () => {
         .where(eq(user.id, created.id));
     }
 
+    await db
+      .update(user)
+      .set({ level: u.level })
+      .where(eq(user.id, created.id));
     console.log(`Opprettet: ${u.email} (${u.role})`);
   }
 
   // Hopp over resten hvis testdata allerede er seedet
   const existingRealm = await db.select().from(realm).limit(1).get();
   if (existingRealm) {
-    console.log("Realms finnes allerede – hopper over realms, posts og kommentarer");
+    console.log(
+      "Realms finnes allerede – hopper over realms, posts og kommentarer",
+    );
     return;
   }
 
