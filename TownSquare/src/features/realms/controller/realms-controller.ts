@@ -3,63 +3,44 @@ import { realmsService, RealmsService } from "../service/realms-service";
 import { Result } from "../types/Result";
 
 export interface RealmsController {
-  list(): Promise<Realm[] | undefined>;
-  create(realmForm: Partial<Realm>): Promise<Response>;
+  list(): Promise<Response>;
+  get(_id: number): Promise<Response>;
+  create(_realmForm: Partial<Realm>): Promise<Response>;
 }
 
-export function createRealmsController(service: RealmsService): RealmsController {
-
+function createRealmsController(_service: RealmsService): RealmsController {
   return {
     async list() {
-        try {
-            const realmsList = await realmsService.list();
-            if (realmsList.length === 0) {
-                return [];
-            }
-            return realmsList;
-        }
-        catch(e) {
-            console.log(e);
-        }
+      const result = await _service.list();
+
+      return new Response(JSON.stringify(result), {
+        status: result.success ? 200 : result.error.code,
+        headers: { "Content-Type": "application/json" },
+      }); 
     },
 
-    async create(realmForm) {
+    async get(_id) {
+      const result = await _service.get(_id);
+
+      return new Response(JSON.stringify(result), {
+        status: result.success ? 200 : result.error.code,
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+
+    async create(_realmForm) {
       // ta ut bruker-id fra ctx
 
       // autorisering av bruker blir håndtert av en interruptor i realmRoutes.ts
 
-      try {
-        const result = await realmsService.create(realmForm)
+      const result = await _service.create(_realmForm);
 
-        if (result !== undefined && !result.success) {
-          const { error } = result;
-          const { message, code } = error;
-          return new Response(JSON.stringify({ error: message }), {
-            status: code || 500,
-            headers: { "Content-Type": "application/json" },
-          })
-        }
-
-        return new Response(JSON.stringify(result), {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        })
-      }
-      catch (error) {
-        console.error(error);
-
-        return new Response(
-          JSON.stringify({
-            error: "Oops, something went wrong. Please try again later."
-          }),
-          {
-            status: 500,
-            headers: { "Content-Type": "application/json" },
-          }
-        )
-      }
-    }
-  }
+      return new Response(JSON.stringify(result), {
+        status: result.success ? 201 : result.error.code,
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+  };
 }
 
 export const realmsController = createRealmsController(realmsService);

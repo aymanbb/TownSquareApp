@@ -1,76 +1,87 @@
 import { Realm } from "../types/Realm";
 import { Result } from "../types/Result";
-
-const realms: Realm[] = [
-    {
-        id: 1,
-        name: "Realm 1",
-        description: "Cool realm",
-        ownerId: 3,
-        createdAt: "Yesterday",
-        //posts: Post[]
-    },
-    {
-        id: 2,
-        name: "Realm 2",
-        description: "Ok realm",
-        ownerId: 1,
-        createdAt: "Today",
-        //posts: Post[]
-    },
-    {
-        id: 3,
-        name: "Realm 3",
-        description: "Cool realm",
-        ownerId: 2,
-        createdAt: "Today",
-        //posts: Post[]
-    },
-]
+import { db } from "@/db";
+import { realm } from "@/db/schema/realm-schema";
+import { authClient } from "@/auth/config/auth-client";
+import { eq } from "drizzle-orm";
 
 export interface RealmsRepository {
-    //create: (realm: any) => Promise<any>;
     list: () => Promise<Realm[]>;
-    create: (realm: Partial<Realm>) => Promise<Result<Realm>>;
+    get: (_id: number) => Promise<Realm>;
+    create: (realm: Partial<Realm>) => Promise<Realm>;
 }
 
-export function createRealmsRepository(db: Realm[]): RealmsRepository {
+function mapRealmRow(row: {
+    id: number;
+    name: string;
+    description: string | null;
+    owner_id: string;
+    created_at: string;
+}): Realm {
+    return {
+        id: row.id,
+        name: row.name,
+        description: row.description ?? "",
+        ownerId: row.owner_id,
+        createdAt: row.created_at,
+    };
+}
+
+function createRealmsRepository(): RealmsRepository {
     return {
         list: async () => {
-            return db;
+            try {
+                const rows = await db.select().from(realm).all();
+                console.log("ROWS: ", rows);
+                console.log(rows.map(mapRealmRow));
+                return rows.map(mapRealmRow);
+            } catch (e) {
+                console.error("Repository error (list): ", e);
+                throw e;
+            }
         },
+
+        get: async (_id) => {
+            try {
+                const row = await db.select().from(realm).where(eq(realm.id, _id)).get();
+
+                if (!row) {
+                    throw new Error("Couldn't retrieve row from db")
+                }
+
+                return mapRealmRow(row);
+            } catch (e) {
+                console.error("Repository error (get): ", e);
+                throw e;
+            }
+        },
+
         create: async (realmForm) => {
-            if (!realmForm.name || realmForm.ownerId == null) {
-                return {
-                    success: false,
-                    error: {
-                        message: "Name and ownerId are required." + realmForm,
-                        code: 400,
-                    },
-                };
+            if (!realmForm.name) {
+                throw new Error("Name is required.")
             }
 
-            // for testing, når nye realm-en blir lagt inn i databasen så blir realm-ID ordnet av AUTO_INCREMENT
-            const lastRealm = db.at(-1);
-            const nextId = lastRealm ? lastRealm.id + 1 : 1;
+            try {
+                const now = new Date().toISOString();
 
-            const newRealm : Realm = {
-                id: nextId,
-                name: realmForm.name,
-                description: realmForm.description ?? "",
-                ownerId: realmForm.ownerId,
-                createdAt: new Date().toISOString(),
-            };
+                const inserted = await db
+                    .insert(realm)
+                    .values({
+                        name: realmForm.name,
+                        description: realmForm.description ?? "",
+                        owner_id: String(realmForm.ownerId),
+                        created_at: now,
+                    })
+                    .returning()
+                    .get();
 
-            db.push(newRealm);
-
-            return {
-                success: true,
-                data: newRealm,
-            };
+                return mapRealmRow(inserted);
+            } catch (e) {
+                console.error("Repository error (create): ", e);
+                throw e;
+            }
         },
     };
 }
 
-export const realmsRepository = createRealmsRepository(realms);
-
+export const realmsRepository = createRealmsRepository();

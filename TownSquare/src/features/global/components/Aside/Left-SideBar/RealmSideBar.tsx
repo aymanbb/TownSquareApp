@@ -3,8 +3,14 @@ import React, { useState } from "react";
 import { MyRealmList } from "./sideBar-content/MyRealmList";
 import { ScrollView } from "@/features/global/components/ScrollView";
 
-export const RealmSideBar = () => {
-  const [myReamls, setMyRealms] = useState([]);
+type RealmSideBarProps = {
+  onCreateRealmClick: () => void;
+};
+
+export const RealmSideBar: React.FC<RealmSideBarProps> = ({
+  onCreateRealmClick,
+}) => {
+  const [myRealms, setMyRealms] = useState([]);
 
   return (
     <>
@@ -12,7 +18,7 @@ export const RealmSideBar = () => {
 
       <button
         type="button"
-        onClick={() => console.log("Create realm")}
+        onClick={onCreateRealmClick}
         className="w-full rounded px-3 py-1 text-white
     bg-gray-500 bg-cover [image-rendering:pixelated]
     font-['MinecraftiaRegular']
@@ -30,3 +36,5 @@ export const RealmSideBar = () => {
     </>
   );
 };
+
+export const SideBar = RealmSideBar;

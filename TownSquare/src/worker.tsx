@@ -28,6 +28,9 @@ import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
 import { auth } from "./auth/config/auth-config";
 import { authMiddleware } from "./auth/config/middleware";
 import { requireAdmin } from "../lib/guards";
+import { Realm } from "./features/realms/types/Realm";
+import { realmsController } from "./features/realms/controller/realms-controller";
+import { realmRoutes } from "./features/realms/realm-routes";
 
 //api endpoints
 import { postRoutes } from "@/features/posts/routes/post-routes";
@@ -40,7 +43,7 @@ export default defineApp([
   setCommonHeaders(),
   //setUser
   authMiddleware,
-
+  ...realmRoutes,
   route("/api/auth/*", async ({ request }) => {
     try {
       const res = await auth.handler(request);
