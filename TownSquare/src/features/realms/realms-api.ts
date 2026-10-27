@@ -23,7 +23,7 @@ export async function listRealms(): Promise<Result<Realm[]>> {
 
 export async function fetchRealm(_id: number): Promise<Result<Realm>> {
   try {
-    const response = await fetch(`api/v1/realms/${_id}`);
+    const response = await fetch(`/api/v1/realms/${_id}`);
 
     const body = (await response.json()) as Result<Realm>;
 
@@ -32,9 +32,8 @@ export async function fetchRealm(_id: number): Promise<Result<Realm>> {
     return {
       success: false,
       error: {
-        message:
-          e.error.message,
-        code: e.error.code,
+        message: "Couldn't reach the API",
+        code: 500,
       }
     }
   }

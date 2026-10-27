@@ -14,7 +14,7 @@ function createRealmsService(_repository: RealmsRepository): RealmsService {
       try {
         const realms = await _repository.list();
         return { success: true, data: realms };
-      } catch (e: any) {
+      } catch (e) {
         console.error("Service error (list): ", e);
         return {
           success: false,
@@ -43,7 +43,7 @@ function createRealmsService(_repository: RealmsRepository): RealmsService {
         return {
           success: false,
           error: {
-            message,
+            message: message,
             code: isValidationError ? 400 : 500,
           }
         }
@@ -64,7 +64,7 @@ function createRealmsService(_repository: RealmsRepository): RealmsService {
         return {
           success: false,
           error: {
-            message,
+            message: message,
             code: isValidationError ? 400 : 500,
           },
         };

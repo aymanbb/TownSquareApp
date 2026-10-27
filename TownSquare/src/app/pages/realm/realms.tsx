@@ -5,6 +5,7 @@ import { Realm } from "@/features/realms/types/Realm";
 import { listRealms, createRealm } from "@/features/realms/realms-api";
 import { Result } from "@/features/realms/types/Result";
 import { authClient } from "@/auth/config/auth-client";
+import { RealmsList } from "@/features/realms/components/RealmsList";
 
 export const Realms = () => {
   const { data: session } = authClient.useSession();
@@ -81,15 +82,8 @@ export const Realms = () => {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <ul>
-        {realms.map((realm) => (
-          <li key={realm.id}>
-            Name: {realm.name} -
-            Description: {realm.description} - 
-            Created at: {realm.createdAt} - 
-          </li>
-        ))}
-      </ul>
+      <RealmsList realms={realms} />
+
       <form onSubmit={handleCreate}>
         <label htmlFor="realmName">
           Realm navn
