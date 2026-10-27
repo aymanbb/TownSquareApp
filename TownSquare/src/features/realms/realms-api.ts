@@ -1,48 +1,65 @@
-// src/features/realms/realms-api.ts
 import type { Realm } from "./types/Realm";
 import type { Result } from "./types/Result";
 
 export async function listRealms(): Promise<Result<Realm[]>> {
   try {
-    const response = await fetch("/api/realms/list");
+    const response = await fetch("/api/v1/realms");
 
     const body = (await response.json()) as Result<Realm[]>;
 
-    // If server already sent { success, data }, just return it
     return body;
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
     return {
       success: false,
       error: {
         message:
-          "Fikk ikke kontakt med serveren eller noe er feil med spørringen",
-        code: 500,
+          e.error.message,
+        code: e.error.code,
       },
     };
   }
 }
 
+export async function fetchRealm(_id: number): Promise<Result<Realm>> {
+  try {
+    const response = await fetch(`api/v1/realms/${_id}`);
+
+    const body = (await response.json()) as Result<Realm>;
+
+    return body;
+  } catch (e: any) {
+    return {
+      success: false,
+      error: {
+        message:
+          e.error.message,
+        code: e.error.code,
+      }
+    }
+  }
+}
+
 export async function createRealm(
-  realmForm: Partial<Realm>,
+  _realmForm: Partial<Realm>,
 ): Promise<Result<Realm>> {
   try {
-    const response = await fetch("/api/realms/create", {
+    const response = await fetch("/api/v1/realms", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(realmForm),
+      body: JSON.stringify(_realmForm),
     });
 
     const body = (await response.json()) as Result<Realm>;
 
     return body;
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
     return {
       success: false,
       error: {
-        message: "Fikk ikke kontakt med serveren",
-        code: 500,
+        message: e.error.message,
+        code: e.error.code,
       },
     };
   }

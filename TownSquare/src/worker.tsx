@@ -30,6 +30,8 @@ import { authMiddleware } from "./auth/config/middleware";
 import { requireAdmin } from "../lib/guards";
 import { Realm } from "./features/realms/types/Realm";
 import { realmsController } from "./features/realms/controller/realms-controller";
+import { realmRoutes } from "./features/realms/realm-routes";
+
 export type AppContext = {
   // user: SessionUser | null;
 };
@@ -38,21 +40,7 @@ export default defineApp([
   setCommonHeaders(),
   //setUser
   authMiddleware,
-
-  route("/api/realms/create", async ({ request }  ) => {
-    const realmForm: Partial<Realm> = await request.json();
-    return realmsController.create(realmForm);
-  }),
-
-  route("/api/realms/list", async () => {
-    return realmsController.list();
-  }),
-
-  route("/api/v1/realms/:realmId", async ({ params }) => {
-    //const id: number = await request.json();
-    return realmsController.get(Number(params.realmId));
-  }),
-
+  ...realmRoutes,
   route("/api/auth/*", async ({ request }) => {
     try {
       const res = await auth.handler(request);
