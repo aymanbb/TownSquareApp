@@ -16,7 +16,7 @@ export const Document: React.FC<{ children: React.ReactNode }> = ({
       />
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=optional"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Pixelify+Sans&display=optional"
         precedence="first"
       />
       <link 

@@ -10,6 +10,7 @@ export interface IUserController {
   remove: (id: string) => Promise<Result<void>>;
   update: (id: string, task: any) => Promise<Result<User>>;
   get: (id: string) => Promise<Result<Partial<User>>>;
+  getByName: (name: string) => Promise<Result<Partial<User>>>;
   list: () => Promise<Result<Partial<User>[]>>;
   isAdmin: (id: string) => Promise<Result<boolean>>;
   sortByLevel: () => Promise<Result<Partial<User>[]>>;
@@ -27,7 +28,26 @@ export function createUserController(_service: IUserService): IUserController {
       } catch (error) {
         return {
           success: false,
-          error: { message: "Kunne ikke hente poster", code: 500 },
+          error: { message: "Kunne ikke hente Bruker med ID", code: 500 },
+        };
+      }
+    },
+    getByName: async (name: string) => {
+      try {
+        const user = await _service.getByName(name);
+        if (!user) {
+          return {
+            success: false,
+            error: { message: "Fant ikke bruker med navn " + name, code: 404 },
+          };
+        }
+        const result: Result<Partial<User>> = { success: true, data: user };
+        console.log("Service: Fetched user by name:", user);
+        return result;
+      } catch (error) {
+        return {
+          success: false,
+          error: { message: "Kunne ikke hente bruker", code: 500 },
         };
       }
     },

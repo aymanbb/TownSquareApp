@@ -15,6 +15,27 @@
       "when": 1793107232428,
       "tag": "0001_nappy_thing",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1793129424057,
+      "tag": "0002_dapper_jack_flag",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1793129603106,
+      "tag": "0003_fresh_agent_zero",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1793129834362,
+      "tag": "0004_gray_randall_flagg",
+      "breakpoints": true
     }
   ]
 }

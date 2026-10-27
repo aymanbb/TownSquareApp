@@ -4,12 +4,12 @@ import { user } from "@/db/schema/auth";
 import { post } from "@/db/schema/post-schema";
 import { eq, desc } from "drizzle-orm";
 import type { User } from "../types/User";
-import { error } from "node:console";
 
 export interface IUserRepository {
   remove: (id: string) => Promise<any>;
   update: (id: string, task: any) => Promise<any>;
   get: (id: string) => Promise<Partial<User>>;
+  getByName: (name: string) => Promise<Partial<User> | undefined>;
   list: () => Promise<Partial<User>[]>;
   isAdmin: (id: string) => Promise<boolean>;
   sortByLevel: () => Promise<Partial<User>[]>;
@@ -46,6 +46,16 @@ export function createUserRepository(_db: typeof db): IUserRepository {
     },
     list: async () => {
       return (await db.select().from(user).all()).map(toUser);
+    },
+    getByName: async (name: string) => {
+      const result = await db
+        .select()
+        .from(user)
+        .where(eq(user.name, name))
+        .get();
+      // Returnerer en tom bruker hvis ikke funnet, så controlleren kan håndtere 404
+
+      return result ? toUser(result) : undefined;
     },
     isAdmin: async (id: string) => {
       const result = await db.select().from(user).where(eq(user.id, id)).get();

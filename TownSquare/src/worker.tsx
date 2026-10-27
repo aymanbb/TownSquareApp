@@ -13,7 +13,7 @@ import { Login } from "@/features/auth/pages/login";
 import { Register } from "@/features/auth/pages/register";
 
 import { Leaderboard } from "@/app/pages/leaderboard";
-import { User } from "@/app/pages/user";
+import { UserPage } from "@/app/pages/user";
 import { Realms } from "@/app/pages/realm/realms";
 import { RealmPage } from "@/app/pages/realm/realmPage";
 import { RealmPostPage } from "@/app/pages/realm/realmPostPage";
@@ -95,8 +95,8 @@ export default defineApp([
       )),
       route("/leaderboard", Leaderboard),
       route("/settings", Settings),
-      route("/user/:userId", ({ params }) => (
-        <User userId={String(params.userId ?? "")} />
+      route("/user/:id", ({ params }) => (
+        <UserPage userName={String(params.id ?? "")} />
       )),
     ]),
   ]),
