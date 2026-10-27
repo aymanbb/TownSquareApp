@@ -13,7 +13,7 @@ import { Login } from "@/features/auth/pages/login";
 import { Register } from "@/features/auth/pages/register";
 
 import { Leaderboard } from "@/app/pages/leaderboard";
-import { User } from "@/app/pages/user";
+import { UserPage } from "@/app/pages/user";
 import { Realms } from "@/app/pages/realm/realms";
 import { RealmPage } from "@/app/pages/realm/realmPage";
 import { RealmPostPage } from "@/app/pages/realm/realmPostPage";
@@ -28,6 +28,10 @@ import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
 import { auth } from "./auth/config/auth-config";
 import { authMiddleware } from "./auth/config/middleware";
 import { requireAdmin } from "../lib/guards";
+
+//api endpoints
+import { postRoutes } from "@/features/posts/routes/post-routes";
+import { userRoutes } from "@/features/auth/routes/user-routes";
 export type AppContext = {
   // user: SessionUser | null;
 };
@@ -68,7 +72,9 @@ export default defineApp([
     The `render` function is used to render the component within the `Document` layout.
   */
 
-  // Routes
+  // Routes/ API-endepunkter
+  ...postRoutes,
+  ...userRoutes,
   // index page
   render(Document, [
     layout(AuthLayout, [route("/login", Login), route("/register", Register)]),
@@ -87,11 +93,11 @@ export default defineApp([
           postId={String(params.postId ?? "")}
         />
       )),
-      route("/settings", Settings),
-      route("/user/:userId", ({ params }) => (
-        <User userId={String(params.userId ?? "")} />
-      )),
       route("/leaderboard", Leaderboard),
+      route("/settings", Settings),
+      route("/user/:id", ({ params }) => (
+        <UserPage userName={String(params.id ?? "")} />
+      )),
     ]),
   ]),
 ]);

@@ -60,7 +60,7 @@ export const Register = () => {
     <>
       <h1>Register</h1>
       <p>Register page content goes here.</p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} method="post">
         <label htmlFor="username">Username:</label>
         <input
           type="text"

@@ -1,10 +1,14 @@
 import { relations, sql } from "drizzle-orm";
 import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import * as postSchema from "./post-schema";
+import * as realmSchema from "./realm-schema";
+import * as commentSchema from "./comment-schema";
 
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   email: text("email").notNull().unique(),
+  level: integer("level").default(0).notNull(),
   emailVerified: integer("email_verified", { mode: "boolean" })
     .default(false)
     .notNull(),
@@ -95,6 +99,13 @@ export const verification = sqliteTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  realms: many(realmSchema.realm),
+  posts: many(postSchema.post),
+  comments: many(commentSchema.comment),
+  likedPosts: many(postSchema.userLikesPost),
+  dislikedPosts: many(postSchema.userDislikesPost),
+  // En bruker kan følge mange realms
+  follows: many(realmSchema.userFollowsRealm),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

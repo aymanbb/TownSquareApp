@@ -1,0 +1,1 @@
+ALTER TABLE `user` ADD `level` integer DEFAULT 0 NOT NULL;

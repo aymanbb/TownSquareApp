@@ -1,65 +1,36 @@
 import type { CSSProperties } from "react";
-import { userController } from "@/features/auth/controller/auth-controller";
+import { userService } from "@/features/auth/service/user-service";
 import type { User } from "@/features/auth/types/User";
-
-type UserProp = {
-  user: User;
-  rankedSpot: number;
-};
-
-const UserCard = ({ user, rankedSpot }: UserProp) => {
+import { UserCardList } from "@/features/auth/components/UserCardList";
+export function Leaderboard() {
   return (
-    <div style={styles.userCard}>
-      <div style={styles.rank}>#{rankedSpot}</div>
+    <>
+      <header className="mb-8 flex flex-col items-center text-center">
+        <div className="flex items-center gap-3">
+          {/* Pokal-ikon */}
+          <img
+            src="/assets/icons/svg/Golden_Crown.svg"
+            alt="Trophy icon"
+            className="h-20 w-20 shrink-0 text-[#FFAA00] drop-shadow-[2px_2px_0_#3F2A00]"
+          />
 
-      <img
-        src={"/assets/icons/svg/UserIcon.svg"}
-        alt={`${user.username}'s avatar`}
-        style={styles.avatar}
-      />
+          <h1 className="m-0 text-4xl uppercase tracking-wider text-[#FFFF55] [text-shadow:3px_3px_0_#3F3F15] sm:text-5xl">
+            Leaderboard
+          </h1>
+        </div>
 
-      <div style={styles.userInfo}>
-        <h2 style={styles.displayName}>{user.displayName ?? user.username}</h2>
+        <div className="mt-3 h-1 w-40 bg-gradient-to-r from-transparent via-[#FFAA00] to-transparent" />
 
-        <p style={styles.username}>@{user.username}</p>
-
-        {user.bio && <p style={styles.bio}>{user.bio}</p>}
-
-        <p style={styles.joined}>Joined: {user.createdAt}</p>
-      </div>
-
-      <div style={styles.level}>
-        <span style={styles.levelLabel}>LEVEL</span>
-
-        <strong style={styles.levelNumber}>{user.level}</strong>
-      </div>
-    </div>
+        <p className="mt-3 text-sm tracking-wide text-[#AAAAAA]">
+          Top community members ranked by level
+        </p>
+      </header>
+      <main>
+        <UserCardList />
+      </main>
+    </>
   );
-};
-
-export const Leaderboard = async () => {
-  const usersByLevel = await userController.sortByLevel();
-
-  return (
-    <main style={styles.leaderboard}>
-      <h1>Leaderboard</h1>
-
-      <p style={styles.description}>Top community members ranked by level</p>
-
-      <ul style={styles.list}>
-        {usersByLevel.map((user, index) => (
-          <li key={user.id}>
-            <UserCard user={user} rankedSpot={index + 1} />
-          </li>
-        ))}
-      </ul>
-    </main>
-  );
-};
-
-/*
- * Styling
- */
+}
 
 const styles: Record<string, CSSProperties> = {
   leaderboard: {
