@@ -20,8 +20,8 @@ export function AppLayout({ children, requestInfo }: LayoutProps) {
       <div
         className="flex min-h-screen
     relative w-full
-    bg-[url('/assets/textures/png/mainBackgroundBrick.png')]
-    bg-repeat bg-[length:720px_720px]
+    bg-[url('assets/textures/png/BackgroundTexturePanorama.png')]
+    bg-cover bg-center
     p-3
      shadow-[0_0_15px_4px_rgba(0,0,0,0.8)]
   "
