@@ -1,4 +1,3 @@
-// src/features/realms/components/CreateRealmForm.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -8,7 +7,7 @@ import { createRealm } from "@/features/realms/realms-api";
 
 type CreateRealmFormProps = {
   user: { id: string } | null;
-  onRealmCreated?: (realm: Realm) => void; // optional for now
+  onRealmCreated?: (realm: Realm) => void;
   onCancel: () => void;
 };
 
@@ -63,38 +62,105 @@ export const CreateRealmForm: React.FC<CreateRealmFormProps> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div
+      className="
+        w-full max-w-xl
+        rounded-xl
+        border-2 border-white
+        bg-black
+        p-6
+        shadow-2xl
+        text-white
+      "
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h2 className="mb-4 text-xl font-semibold">Create new realm</h2>
 
-      <label htmlFor="realmName">
-        Realm navn
-      </label>
-      <input
-        type="text"
-        id="realmName"
-        placeholder="Skriv navnet på ditt nye realm her"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        style={{ margin: "10px", backgroundColor: "violet" }}
-      />
+      {error && (
+        <p className="mb-3 text-sm text-red-400">
+          {error}
+        </p>
+      )}
 
-      <label htmlFor="realmDesc">
-        Realm beskrivelse
-      </label>
-      <input
-        type="text"
-        id="realmDesc"
-        placeholder="Skriv beskrivelsen til ditt nye realm her"
-        value={desc}
-        onChange={(e) => setDesc(e.target.value)}
-        style={{ margin: "10px", backgroundColor: "violet" }}
-      />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex flex-col">
+          <label htmlFor="realmName" className="mb-1 text-sm font-medium">
+            Realm navn
+          </label>
+          <input
+            type="text"
+            id="realmName"
+            placeholder="Skriv navnet på ditt nye realm her"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="
+              rounded
+              border border-gray-500
+              bg-black
+              px-2 py-1
+              text-white
+              placeholder-gray-400
+              focus:border-white
+              focus:outline-none
+            "
+          />
+        </div>
 
-      <button type="button" onClick={onCancel}>
-        Cancel
-      </button>
+        <div className="flex flex-col">
+          <label htmlFor="realmDesc" className="mb-1 text-sm font-medium">
+            Realm beskrivelse
+          </label>
+          <input
+            type="text"
+            id="realmDesc"
+            placeholder="Skriv beskrivelsen til ditt nye realm her"
+            value={desc}
+            onChange={(e) => setDesc(e.target.value)}
+            className="
+              rounded
+              border border-gray-500
+              bg-black
+              px-2 py-1
+              text-white
+              placeholder-gray-400
+              focus:border-white
+              focus:outline-none
+            "
+          />
+        </div>
 
-      <input type="submit" value="Create" />
-    </form>
+        <div className="mt-4 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="
+              rounded
+              border border-gray-400
+              px-3 py-1
+              text-sm
+              hover:bg-gray-800
+            "
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            className="
+              rounded
+              border border-white
+              bg-white
+              px-3 py-1
+              text-sm
+              font-semibold
+              text-black
+              hover:bg-gray-200
+            "
+          >
+            Create
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };

@@ -36,11 +36,19 @@ function AppLayoutInner({ children, requestInfo }: LayoutProps) {
         <main className="min-w-0 flex-1">{children}</main>
 
         {isOpen && (
-          <CreateRealmForm
-            user={user ?? null}
-            onRealmCreated={handleRealmCreated}
-            onCancel={closeForm}
-          />
+          <div
+            className="
+              fixed inset-0 z-50
+              flex items-center justify-center
+              bg-black/50
+            "
+          >
+            <CreateRealmForm
+              user={user ?? null}
+              onRealmCreated={handleRealmCreated}
+              onCancel={closeForm}
+            />
+          </div>
         )}
 
         <aside className="flex h-screen w-60 flex-col">
