@@ -6,6 +6,7 @@ export interface RealmsService {
   list(): Promise<Result<Realm[]>>;
   get(_id: number): Promise<Result<Realm>>;
   create(_realmForm: Partial<Realm>): Promise<Result<Realm>>;
+  follow(_userId: string, _realmId: string): Promise<Result<string>>;
 }
 
 function createRealmsService(_repository: RealmsRepository): RealmsService {
@@ -54,8 +55,7 @@ function createRealmsService(_repository: RealmsRepository): RealmsService {
       try {
           const realm = await _repository.create(_realmForm);
           return { success: true, data: realm };
-      }
-      catch (e){
+      } catch (e){
         console.error("Service error (create): ", e);
         
         const message = e instanceof Error ? e.message : "Failed to create realm";
@@ -70,6 +70,26 @@ function createRealmsService(_repository: RealmsRepository): RealmsService {
         };
       }
     },
+
+    async follow(_userId: string, _realmId: string): Promise<Result<string>> {
+      try {
+        console.log("(service) ATTAAAAAAAAAAAAAAAAAAAACk")
+        const result = await _repository.follow(_userId, _realmId);
+        return { success: true, data: "You have followed this realm" };
+      } catch (e){
+        console.error("Service error (create): ", e);
+        
+        const message = e instanceof Error ? e.message : "Failed to follow realm";
+
+        return {
+          success: false,
+          error: {
+            message: message,
+            code: 400,
+          },
+        };
+      }
+    }
   };
 }
 

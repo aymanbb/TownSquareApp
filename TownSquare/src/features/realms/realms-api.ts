@@ -63,3 +63,34 @@ export async function createRealm(
     };
   }
 }
+
+export async function followRealm(_userId: string, _realmId: string): Promise<Result<void>> {
+  try {
+    const response = await fetch(`/api/v1/realms?followRealm=${_realmId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: _userId }),
+    });
+    if (!response.ok) {
+      return {
+        success: false,
+        error: {
+          code: response.status,
+          message: "Failed to follow realm",
+        },
+      };
+    }
+
+    return { success: true, data: undefined };
+  } catch (e: any) {
+    console.error(e);
+    return {
+      success: false,
+      error: {
+        message: e.error.message,
+        code: e.error.code,
+      },
+    };
+  }
+}
+
