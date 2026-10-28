@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { User } from "@/features/auth/types/User";
 import { Realm } from "@/features/realms/types/Realm";
 import { listUsers } from "@/features/auth/api/user-api";
+import { listRealms } from "@/features/realms/realms-api";
+import { Result } from "@/features/utils/Result";
 
 type SearchResult =
   | { type: "user"; data: Partial<User> }
@@ -23,13 +25,20 @@ export const SearchField = () => {
     const fetchUsers = async () => {
       listUsers().then((data) => {
         console.log("Fetched posts:", data);
-        setUsers(data);
+        setUsers(data ?? []);
       });
     };
     const fetchRealms = async () => {
       // Replace this with your actual API call to fetch realms
-      const data: Partial<Realm>[] = [];
-      console.log("Fetched realms:", data);
+      const result: Result<Partial<Realm>[]> = await listRealms();
+      if (!result.success) {
+        console.error("Failed to fetch realms");
+        return;
+      }
+      // We parse the result to extract the actual data array of realms
+      const data = result.data;
+
+      setRealms(data ?? []);
     };
     fetchUsers();
     fetchRealms();
@@ -105,7 +114,7 @@ export const SearchField = () => {
                   href={
                     result.type === "user"
                       ? `/user/${result.data.name}`
-                      : `/realm/${result.data.id}`
+                      : `/realms/${result.data.id}`
                   }
                   className="block w-full px-2 py-1"
                   onMouseDown={(e) => e.preventDefault()}
