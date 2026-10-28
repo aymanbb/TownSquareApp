@@ -20,7 +20,6 @@ type UserRow = typeof user.$inferSelect;
 const toUser = (row: UserRow): Partial<User> => ({
   id: row.id,
   name: row.name,
-  email: row.email,
   role: row.role ?? "user",
   level: row.level,
 });

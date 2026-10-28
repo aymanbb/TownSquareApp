@@ -34,9 +34,9 @@ export const AccountTab = () => {
       </section>
 
       <section className="flex flex-col gap-2">
-        <a href="">View Profile</a>
-        <a href="">Messages</a>
-        <a href="">Settings</a>
+        <a href={`/user/${user?.name ?? ""}`}>View Profile</a>
+        <a href="/">Messages</a>
+        <a href="/settings">Settings</a>
 
         {user && <button onClick={handleLogout}>Logout</button>}
       </section>

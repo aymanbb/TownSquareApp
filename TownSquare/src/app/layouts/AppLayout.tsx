@@ -1,7 +1,9 @@
 "use client";
 
 import type { LayoutProps } from "rwsdk/router";
-import { Header, Footer, NavBar, Logo } from "@/features/global/components";
+import { Header, Footer, Logo } from "@/features/global/components";
+import { NavBar } from "@/features/global/components/NavBar/NavBar";
+
 import { RealmSideBar } from "@/features/global/components/Aside/Left-SideBar/RealmSideBar";
 import { AccountSideBar } from "@/features/global/components/Aside/Right-SideBar/AccountSideBar";
 import { useCreateRealmForm } from "@/features/realms/hooks/useCreateRealmForm";

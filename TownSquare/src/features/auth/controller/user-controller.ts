@@ -41,6 +41,7 @@ export function createUserController(_service: IUserService): IUserController {
             error: { message: "Fant ikke bruker med navn " + name, code: 404 },
           };
         }
+
         const result: Result<Partial<User>> = { success: true, data: user };
         console.log("Service: Fetched user by name:", user);
         return result;
