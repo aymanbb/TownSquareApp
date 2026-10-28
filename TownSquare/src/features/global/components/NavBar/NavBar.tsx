@@ -1,5 +1,7 @@
+import { SearchField } from "./SearchButton";
 const iconSize = "h-12 w-12";
-const fog = `
+const fog = `relative isolate z-50
+  before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded
   relative isolate
   before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded
   before:bg-gradient-to-b before:from-slate-900/10 before:via-slate-800/35 before:to-slate-900/70
@@ -55,35 +57,7 @@ export const NavBar = () => {
           </a>
         </li>
       </ul>
-      <form id="search-bar" className="flex items-center gap-2">
-        <label htmlFor="search" className="text-white">
-          <img
-            src="/assets/icons/svg/MagnifyingGlassSilver.svg"
-            alt=""
-            className={`h-14 w-14 object-contain`}
-          />
-        </label>
-        <input
-          type="search"
-          id="search"
-          className="rounded border border-gray-300 px-2 py-1 text-white bg-gray-700"
-          placeholder="Seek the Realm..."
-        />
-        <button
-          type="submit"
-          className="rounded px-3 py-1 text-white
-    bg-gray-500 bg-cover [image-rendering:pixelated]
-    font-['MinecraftiaRegular']
-    border-2 border-t-[#AAA] border-l-[#AAA] border-r-[#565656] border-b-[#565656]
-    text-shadow-[3px_3px_#4C4C4C]
-    outline-2 outline-solid outline-black
-    px-4 py-2 text-white
-    hover:bg-blue-400/50
-  "
-        >
-          Search
-        </button>
-      </form>
+      <SearchField />
     </nav>
   );
 };

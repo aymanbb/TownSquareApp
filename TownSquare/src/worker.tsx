@@ -27,7 +27,7 @@ import { AuthLayout } from "@/app/layouts/AuthLayout";
 import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
 import { auth } from "./auth/config/auth-config";
 import { authMiddleware } from "./auth/config/middleware";
-import { requireAdmin } from "../lib/guards";
+import { requireAdmin, requireUser, redirectIfLoggedIn } from "../lib/guards";
 
 //api endpoints
 import { postRoutes } from "@/features/posts/routes/post-routes";
@@ -77,7 +77,20 @@ export default defineApp([
   ...userRoutes,
   // index page
   render(Document, [
-    layout(AuthLayout, [route("/login", Login), route("/register", Register)]),
+    layout(AuthLayout, [
+      route("/login", [
+        () => {
+          return redirectIfLoggedIn();
+        },
+        Login,
+      ]),
+      route("/register", [
+        () => {
+          return redirectIfLoggedIn();
+        },
+        Register,
+      ]),
+    ]),
     layout(AppInfoLayout, [route("/about", About), route("/support", Support)]),
     layout(AppLayout, [
       route("/", Home),
@@ -94,7 +107,12 @@ export default defineApp([
         />
       )),
       route("/leaderboard", Leaderboard),
-      route("/settings", Settings),
+      route("/settings", [
+        () => {
+          requireUser();
+        },
+        Settings,
+      ]),
       route("/user/:id", ({ params }) => (
         <UserPage userName={String(params.id ?? "")} />
       )),
