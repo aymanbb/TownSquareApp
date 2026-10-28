@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import type { Post } from "../../types/Post";
-
+import { fetchRealm } from "@/features/realms/realms-api";
 interface PostCardProps {
   post: Post;
 }
@@ -25,6 +25,27 @@ const stackCount =
   "[text-shadow:2px_2px_0_#3F3F3F] font-['Pixelify_Sans'] pointer-events-none";
 
 export const PostCard = ({ post }: PostCardProps) => {
+  const [realmName, setRealmName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRealmName: (realmId: number) => Promise<string | null> = async (
+      realmId: number,
+    ) => {
+      try {
+        const result = await fetchRealm(realmId);
+        if (!result.success) {
+          console.error("Failed to fetch realm");
+          return null;
+        }
+        return result.data?.name ?? null;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    };
+    fetchRealmName(post.realmId).then(setRealmName);
+  }, [post]);
+
   return (
     <article className={`flex gap-4 ${mcButton}`}>
       <div className="flex flex-col gap-2 justify-around">
@@ -56,7 +77,7 @@ export const PostCard = ({ post }: PostCardProps) => {
 
       <div className="flex w-full flex-col justify-center gap-2">
         <h3>
-          {post.title} – {post.realmId}
+          {post.title} – postet i {realmName}
         </h3>
         <p>{post.content}</p>
       </div>
@@ -77,7 +98,7 @@ export const PostCard = ({ post }: PostCardProps) => {
             className="h-full w-full object-contain [image-rendering:pixelated]"
           />
         </button>
-        <p className="text-center block">realm/{post.realmId}</p>
+        <p className="text-center block">realm/{realmName}</p>
       </div>
     </article>
   );
