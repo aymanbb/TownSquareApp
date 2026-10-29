@@ -10,7 +10,10 @@ import { useCreateRealmForm } from "@/features/realms/hooks/useCreateRealmForm";
 import { authClient } from "@/auth/config/auth-client";
 import type { Realm } from "@/features/realms/types/Realm";
 import { CreateRealmForm } from "@/features/realms/components/CreateRealmForm";
-import { RealmsProvider, useRealms } from "@/features/realms/context/RealmsContext";
+import {
+  RealmsProvider,
+  useRealms,
+} from "@/features/realms/context/RealmsContext";
 
 function AppLayoutInner({ children, requestInfo }: LayoutProps) {
   const { isOpen, openForm, closeForm } = useCreateRealmForm();
@@ -82,5 +85,5 @@ export function AppLayout({ children }: LayoutProps) {
     <RealmsProvider>
       <AppLayoutInner>{children}</AppLayoutInner>
     </RealmsProvider>
-  )
+  );
 }

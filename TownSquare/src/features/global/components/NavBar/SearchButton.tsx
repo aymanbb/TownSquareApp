@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
+import Buffering from "@/features/global/components/Buffering";
 import { User } from "@/features/auth/types/User";
 import { Realm } from "@/features/realms/types/Realm";
 import { listUsers } from "@/features/auth/api/user-api";
-import { listRealms } from "@/features/realms/realms-api";
+import { listRealms } from "@/features/realms/api/realms-api";
 import { Result } from "@/features/utils/Result";
+import { useFetch } from "@/features/utils/useFetch";
 
 type SearchResult =
   | { type: "user"; data: Partial<User> }
@@ -14,35 +16,20 @@ type SearchResult =
 export const SearchField = () => {
   console.log("SearchField component rendered");
   const [search, setSearch] = useState("");
-  const [users, setUsers] = useState<Partial<User>[]>([]);
-  const [realms, setRealms] = useState<Partial<Realm>[]>([]);
+  const {
+    data: users,
+    loading: usersLoading,
+    error: usersError,
+  } = useFetch(listUsers, []);
+  const {
+    data: realms,
+    loading: realmsLoading,
+    error: realmsError,
+  } = useFetch(listRealms, []);
 
   const [filteredResult, setFilteredResult] = useState<SearchResult[]>([]);
 
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      listUsers().then((data) => {
-        console.log("Fetched posts:", data);
-        setUsers(data ?? []);
-      });
-    };
-    const fetchRealms = async () => {
-      // Replace this with your actual API call to fetch realms
-      const result: Result<Partial<Realm>[]> = await listRealms();
-      if (!result.success) {
-        console.error("Failed to fetch realms");
-        return;
-      }
-      // We parse the result to extract the actual data array of realms
-      const data = result.data;
-
-      setRealms(data ?? []);
-    };
-    fetchUsers();
-    fetchRealms();
-  }, []);
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -65,12 +52,16 @@ export const SearchField = () => {
         )
         .map((user) => ({ type: "user" as const, data: user })),
     ]);
-  }, [search]);
+  }, [search, users, realms]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
-    console.log("Input changed to:", event.target.value);
+    //console.log("Input changed to:", event.target.value);
   };
+
+  if (usersLoading || realmsLoading) return <Buffering />;
+  if (usersError) return <p>{usersError}</p>;
+  if (realmsError) return <p>{realmsError}</p>;
 
   return (
     <form

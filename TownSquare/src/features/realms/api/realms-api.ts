@@ -1,42 +1,31 @@
-import type { Realm } from "./types/Realm";
-import type { Result } from "./types/Result";
+import type { Realm } from "../types/Realm";
+import type { Result } from "../types/Result";
 
-export async function listRealms(): Promise<Result<Realm[]>> {
+export async function listRealms(): Promise<Realm[]> {
   try {
     const response = await fetch("/api/v1/realms");
 
-    const body = (await response.json()) as Result<Realm[]>;
-
-    return body;
+    const result: Result<Realm[]> = await response.json();
+    if (!result.success) {
+      throw new Error(result.error?.message || "Kunne ikke hente realms");
+    }
+    return result.data ?? [];
   } catch (e: any) {
     console.error(e);
-    return {
-      success: false,
-      error: {
-        message:
-          e.error.message,
-        code: e.error.code,
-      },
-    };
+    return [];
   }
 }
 
-export async function fetchRealm(_id: number): Promise<Result<Realm>> {
-  try {
-    const response = await fetch(`/api/v1/realms/${_id}`);
+export async function fetchRealm(_id: number): Promise<Realm> {
+  const response = await fetch(`/api/v1/realms/${_id}`);
 
-    const body = (await response.json()) as Result<Realm>;
+  const result: Result<Realm> = await response.json();
 
-    return body;
-  } catch (e: any) {
-    return {
-      success: false,
-      error: {
-        message: "Couldn't reach the API",
-        code: 500,
-      }
-    }
+  if (!result.success) {
+    throw new Error(result.error?.message || "Kunne ikke hente realms");
   }
+
+  return result.data!;
 }
 
 export async function createRealm(
@@ -64,7 +53,10 @@ export async function createRealm(
   }
 }
 
-export async function followRealm(_userId: string, _realmId: string): Promise<Result<void>> {
+export async function followRealm(
+  _userId: string,
+  _realmId: string,
+): Promise<Result<void>> {
   try {
     const response = await fetch(`/api/v1/realms?followRealm=${_realmId}`, {
       method: "POST",
@@ -93,4 +85,3 @@ export async function followRealm(_userId: string, _realmId: string): Promise<Re
     };
   }
 }
-

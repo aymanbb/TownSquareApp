@@ -6,6 +6,8 @@ import { setCommonHeaders } from "@/app/headers";
 
 //Layout
 import { AppLayout } from "@/app/layouts/AppLayout";
+import { AuthLayout } from "@/app/layouts/AuthLayout";
+import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
 
 // Pages
 import { Home } from "@/app/pages";
@@ -23,18 +25,16 @@ import { AdminDashboardPage } from "@/features/auth/components/AdminDashBoardPag
 import { About } from "@/app/pages/about";
 import { Settings } from "@/app/pages/settings";
 import { Support } from "@/app/pages/support";
-import { AuthLayout } from "@/app/layouts/AuthLayout";
-import { AppInfoLayout } from "@/app/layouts/AppInfoLayout";
+
+// Auth configuration and middleware
 import { auth } from "./auth/config/auth-config";
 import { authMiddleware } from "./auth/config/middleware";
-import { Realm } from "./features/realms/types/Realm";
-import { realmsController } from "./features/realms/controller/realms-controller";
-import { realmRoutes } from "./features/realms/realm-routes";
 import { requireAdmin, requireUser, redirectIfLoggedIn } from "../lib/guards";
 
 //api endpoints
 import { postRoutes } from "@/features/posts/routes/post-routes";
 import { userRoutes } from "@/features/auth/routes/user-routes";
+import { realmRoutes } from "@/features/realms/routes/realm-routes";
 export type AppContext = {
   // user: SessionUser | null;
 };

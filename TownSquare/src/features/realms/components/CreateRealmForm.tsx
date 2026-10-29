@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import type { Realm } from "@/features/realms/types/Realm";
 import type { Result } from "@/features/realms/types/Result";
-import { createRealm } from "@/features/realms/realms-api";
+import { createRealm } from "@/features/realms/api/realms-api";
 
 type CreateRealmFormProps = {
   user: { id: string } | null;
@@ -76,11 +76,7 @@ export const CreateRealmForm: React.FC<CreateRealmFormProps> = ({
     >
       <h2 className="mb-4 text-xl font-semibold">Create new realm</h2>
 
-      {error && (
-        <p className="mb-3 text-sm text-red-400">
-          {error}
-        </p>
-      )}
+      {error && <p className="mb-3 text-sm text-red-400">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex flex-col">

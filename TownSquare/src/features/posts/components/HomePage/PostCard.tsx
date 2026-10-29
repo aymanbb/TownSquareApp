@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import type { Post } from "../../types/Post";
-import { fetchRealm } from "@/features/realms/realms-api";
+import { fetchRealm } from "@/features/realms/api/realms-api";
+import { useFetch } from "@/features/utils/useFetch";
 interface PostCardProps {
   post: Post;
 }
@@ -27,24 +28,16 @@ const stackCount =
 export const PostCard = ({ post }: PostCardProps) => {
   const [realmName, setRealmName] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchRealmName: (realmId: number) => Promise<string | null> = async (
-      realmId: number,
-    ) => {
-      try {
-        const result = await fetchRealm(realmId);
-        if (!result.success) {
-          console.error("Failed to fetch realm");
-          return null;
-        }
-        return result.data?.name ?? null;
-      } catch (error) {
-        console.error(error);
-        return null;
-      }
-    };
-    fetchRealmName(post.realmId).then(setRealmName);
-  }, [post]);
+  const { data, error, loading } = useFetch(
+    () => fetchRealm(post.realmId),
+    null,
+  );
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (data && !realmName) {
+    setRealmName(data?.name ?? null);
+  }
 
   return (
     <article className={`flex gap-4 ${mcButton}`}>
