@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { Realm } from "@/features/realms/types/Realm";
-import { followRealm } from "../realms-api";
+import { followRealm } from "../api/realms-api";
 import { authClient } from "@/auth/config/auth-client";
 
 type RealmsListCardProps = {
@@ -22,7 +22,7 @@ export const RealmsListCard: React.FC<RealmsListCardProps> = ({ realm }) => {
       if (!result.success) {
         console.error(result.error.message);
         return;
-      } 
+      }
       if (result.success) {
         console.log("Joined!");
         return;
@@ -51,9 +51,7 @@ export const RealmsListCard: React.FC<RealmsListCardProps> = ({ realm }) => {
         <h2 className="m-0 text-lg tracking-wide uppercase text-amber-300 drop-shadow-md">
           {realm.name}
         </h2>
-        <p className="mt-2 mb-0 text-sm leading-relaxed">
-          {realm.description}
-        </p>
+        <p className="mt-2 mb-0 text-sm leading-relaxed">{realm.description}</p>
       </div>
 
       <button

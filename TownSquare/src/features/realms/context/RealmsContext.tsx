@@ -9,7 +9,8 @@ import React, {
 } from "react";
 import type { Realm } from "@/features/realms/types/Realm";
 import type { Result } from "@/features/realms/types/Result";
-import { listRealms } from "@/features/realms/realms-api";
+import { listRealms } from "@/features/realms/api/realms-api";
+import { useFetch } from "@/features/utils/useFetch";
 
 type RealmsContextValue = {
   realms: Realm[];
@@ -29,23 +30,15 @@ export function RealmsProvider({ children }: { children: ReactNode }) {
   async function loadRealms() {
     setLoading(true);
     setError(null);
-
-    const result: Result<Realm[]> = await listRealms();
-
-    if (!result.success) {
-      setError(result.error.message);
+    try {
+      setRealms(await listRealms());
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Kunne ikke hente realms");
       setRealms([]);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    setRealms(Array.isArray(result.data) ? result.data : []);
-    setLoading(false);
   }
-
-  useEffect(() => {
-    loadRealms();
-  }, []);
 
   function addRealm(realm: Realm) {
     setRealms((prev) => [...prev, realm]);
@@ -60,9 +53,7 @@ export function RealmsProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <RealmsContext.Provider value={value}>
-      {children}
-    </RealmsContext.Provider>
+    <RealmsContext.Provider value={value}>{children}</RealmsContext.Provider>
   );
 }
 
