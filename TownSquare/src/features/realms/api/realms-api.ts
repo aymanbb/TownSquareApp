@@ -85,3 +85,24 @@ export async function followRealm(
     };
   }
 }
+
+export async function checkFollow(_userId: string, _realmId: string): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/v1/realms/check-follow?realmId=${_realmId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: _userId }),
+    });
+    console.log("api response: ", response);
+
+    if (!response.ok) {
+      return false;
+    }
+
+    const body = await response.json() as { follows: boolean };
+    return !!body.follows;
+  } catch (e: any) {
+    console.error(e);
+    return false;
+  }
+}

@@ -1,12 +1,12 @@
 import { Realm } from "../types/Realm";
 import { realmsService, RealmsService } from "../service/realms-service";
-import { Result } from "../types/Result";
 
 export interface RealmsController {
   list(): Promise<Response>;
   get(_id: number): Promise<Response>;
   create(_realmForm: Partial<Realm>): Promise<Response>;
   follow(_userId: string, _realmId: string): Promise<Response>;
+  checkFollow(_userId: string, _realmId: string): Promise<Response>;
 }
 
 function createRealmsController(_service: RealmsService): RealmsController {
@@ -17,7 +17,7 @@ function createRealmsController(_service: RealmsService): RealmsController {
       return new Response(JSON.stringify(result), {
         status: result.success ? 200 : result.error.code,
         headers: { "Content-Type": "application/json" },
-      }); 
+      });
     },
 
     async get(_id) {
@@ -30,10 +30,6 @@ function createRealmsController(_service: RealmsService): RealmsController {
     },
 
     async create(_realmForm) {
-      // ta ut bruker-id fra ctx
-
-      // autorisering av bruker blir håndtert av en interruptor i realmRoutes.ts
-
       const result = await _service.create(_realmForm);
 
       return new Response(JSON.stringify(result), {
@@ -43,14 +39,22 @@ function createRealmsController(_service: RealmsService): RealmsController {
     },
 
     async follow(userId: string, realmId: string) {
-      console.log("(controller) ATTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACK")
-      console.log("typeof realmsController.follow:", typeof realmsController.follow);
       const result = await _service.follow(userId, realmId);
-      // return something simple; adjust as needed
+
       return new Response(JSON.stringify(result), {
         status: result.success ? 200 : result.error.code,
-        headers: { "Content-Type": "application/json" }
-      })
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+
+    async checkFollow(_userId: string, _realmId: string) {
+      const follows = await _service.checkFollow(_userId, _realmId);
+
+      // Return raw boolean JSON
+      return new Response(JSON.stringify({ follows }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
     },
   };
 }

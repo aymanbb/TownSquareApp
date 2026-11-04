@@ -7,6 +7,7 @@ export interface RealmsService {
   get(_id: number): Promise<Result<Realm>>;
   create(_realmForm: Partial<Realm>): Promise<Result<Realm>>;
   follow(_userId: string, _realmId: string): Promise<Result<string>>;
+  checkFollow(_userId: string, _realmId: string): Promise<boolean>;
 }
 
 function createRealmsService(_repository: RealmsRepository): RealmsService {
@@ -89,7 +90,16 @@ function createRealmsService(_repository: RealmsRepository): RealmsService {
           },
         };
       }
-    }
+    },
+
+    async checkFollow(_userId: string, _realmId: string): Promise<boolean> {
+      try {
+        return await realmsRepository.checkFollow(_userId, _realmId);
+      } catch (e) {
+        console.error("Service error (checkFollow):", e);
+        return false;
+      }
+    },
   };
 }
 
