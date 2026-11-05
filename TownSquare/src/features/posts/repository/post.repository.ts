@@ -4,7 +4,7 @@ import { post } from "@/db/schema/post-schema";
 import { eq } from "drizzle-orm";
 
 export interface IPostRepository {
-  create: (post: Post) => Promise<any>;
+  create: (post: Partial<Post>) => Promise<Post>;
   remove: (id: number) => Promise<any>;
   update: (id: number, post: Post) => Promise<any>;
   get: (id: number) => Promise<Post>;
@@ -26,32 +26,62 @@ const toPost = (row: PostRow): Post => ({
 });
 
 export function createPostRepository(_db: typeof db): IPostRepository {
-  // Implementation goes here
   return {
-    create: async (value: Post) => {
-      throw new Error("Not implemented");
+    create: async (postForm) => {
+      if (!postForm.title || !postForm.content) {
+        throw new Error("Title and content are required.");
+      }
+      if (!postForm.authorId || !postForm.realmId) {
+        throw new Error("authorId and realmId are required.");
+      }
+
+      try {
+        const now = new Date().toISOString();
+
+        const inserted = await db
+          .insert(post)
+          .values({
+            title: postForm.title,
+            content: postForm.content,
+            author_id: String(postForm.authorId),
+            realm_id: Number(postForm.realmId),
+            created_at: now,
+            likes: 0,
+            dislikes: 0,
+          })
+          .returning()
+          .get();
+
+        return toPost(inserted);
+      } catch (e) {
+        console.error("PostRepository.create error:", e);
+        throw new Error("Failed to create post");
+      }
     },
+
+
     remove: async (id: number) => {
       throw new Error("Not implemented");
     },
-    update: async (id: number, post: Post) => {
+
+    update: async (id: number, postValue: Post) => {
       throw new Error("Not implemented");
     },
+
     get: async (id: number) => {
-      // henter ut en post fra databasen basert på id
       const row = await _db.select().from(post).where(eq(post.id, id)).get();
       if (!row) {
         throw new Error(`Post with id ${id} not found`);
       }
       return toPost(row);
     },
+
     list: async () => {
-      // henter ut alle poster fra databasen og konverterer dem til Post-objekter
       const rows = await _db.select().from(post).all();
       return rows.map(toPost);
     },
+
     listByRealm: async (realmId: number) => {
-      // henter ut alle poster fra databasen som tilhører det spesifikke realmId
       const rows = await _db
         .select()
         .from(post)

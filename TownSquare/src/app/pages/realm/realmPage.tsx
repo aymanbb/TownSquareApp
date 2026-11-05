@@ -1,16 +1,26 @@
 "use client";
 
 import { fetchRealm } from "@/features/realms/api/realms-api";
-import { useEffect } from "react";
+import { useState } from "react";
 import { Realm } from "@/features/realms/types/Realm";
 import { useFetch } from "@/features/utils/useFetch";
 import RealmPostFeed from "@/features/posts/components/HomePage/PostsByRealm";
+import { authClient } from "@/auth/config/auth-client";
+import { CreatePostForm } from "@/features/posts/components/HomePage/CreatePostForm";
+import type { Post } from "@/features/posts/types/Post";
 
 type RealmPageProps = {
   realmId: string;
 };
 
 export const RealmPage = ({ realmId }: RealmPageProps) => {
+  const [postError, setPostError] = useState<string | null>(null);
+  const [showCreatePost, setShowCreatePost] = useState(false);
+  const [feedRefreshKey, setFeedRefreshKey] = useState(0);
+
+  const { data: session } = authClient.useSession();
+  const user = session?.user ?? null;
+
   const {
     data: realm,
     loading,
@@ -47,6 +57,15 @@ export const RealmPage = ({ realmId }: RealmPageProps) => {
   const realmSlotStyle =
     "h-16 w-16 shrink-0 bg-[#8B8B8B] p-1 " +
     "shadow-[inset_2px_2px_0_#373737,inset_-2px_-2px_0_#FFFFFF]";
+
+  const handlePostCreated = (_post: Post) => {
+    // 2) Skjul skjemaet
+    setShowCreatePost(false);
+    // Nullstill eventuell feilmelding
+    setPostError(null);
+    // 2) Tving RealmPostFeed til å refetche ved å endre key
+    setFeedRefreshKey((k) => k + 1);
+  };
 
   return (
     <div className="flex flex-col items-center mt-8 px-4 gap-4">
@@ -139,8 +158,45 @@ export const RealmPage = ({ realmId }: RealmPageProps) => {
         </div>
       </section>
 
+      {postError && (
+        <div className="w-full max-w-4xl text-sm text-red-400 mb-1">
+          {postError}
+        </div>
+      )}
+
       <section className="w-full max-w-4xl">
-        <RealmPostFeed realmId={Number(realmId)} />
+        <div className="mb-2 flex justify-end">
+          <button
+            type="button"
+            onClick={() => setShowCreatePost((prev) => !prev)}
+            className="
+              rounded
+              border border-white
+              bg-[#4A4A4A]
+              px-3 py-1
+              text-xs
+              font-semibold
+              text-white
+              hover:bg-[#6F6F6F]
+            "
+          >
+            {showCreatePost ? "Close post form" : "New post"}
+          </button>
+        </div>
+
+        {/* 1) Skjuler/viser uten å unmount'e, så input beholdes */}
+        <div className={showCreatePost ? "block" : "hidden"}>
+          <CreatePostForm
+            user={user}
+            realmId={Number(realmId)}
+            onErrorChange={setPostError}
+            onPostCreated={handlePostCreated}
+          />
+        </div>
+      </section>
+
+      <section className="w-full max-w-4xl">
+        <RealmPostFeed key={feedRefreshKey} realmId={Number(realmId)} />
       </section>
     </div>
   );

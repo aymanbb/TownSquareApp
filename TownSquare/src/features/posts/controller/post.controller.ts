@@ -3,7 +3,7 @@ import type { Post } from "../types/Post";
 import type { Result } from "../utils/Result";
 
 export interface IPostController {
-  create: (post: Post) => Promise<Result<Post>>;
+  create: (post: Partial<Post>) => Promise<Response>;
   remove: (id: number) => Promise<Result<void>>;
   update: (id: number, post: Post) => Promise<Result<Post>>;
   get: (id: number) => Promise<Result<Post>>;
@@ -13,8 +13,31 @@ export interface IPostController {
 
 export function createPostController(_service: IPostService): IPostController {
   return {
-    create: async (post: Post) => {
-      return _service.create(post);
+    async create(postForm: Partial<Post>): Promise<Response> {
+      try {
+        const created = await _service.create(postForm);
+        return new Response(JSON.stringify(created), {
+          status: 201,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (e) {
+        console.error("PostController.create error:", e);
+        const message =
+          e instanceof Error ? e.message : "Failed to create post";
+
+        let status = 500;
+        if (
+          message === "Title and content are required." ||
+          message === "authorId and realmId are required."
+        ) {
+          status = 400;
+        }
+
+        return new Response(JSON.stringify({ message }), {
+          status,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
     },
     remove: async (id: number) => {
       return _service.remove(id);
