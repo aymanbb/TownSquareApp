@@ -1,103 +1,134 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import type { Post } from "../../types/Post";
 import { fetchRealm } from "@/features/realms/api/realms-api";
 import { useFetch } from "@/features/utils/useFetch";
+import { getUser } from "@/features/auth/api/user-api";
+
 interface PostCardProps {
   post: Post;
 }
+
 const mcButton =
-  "border-2 border-black bg-[#6F6F6F] px-4 py-2 text-white " +
+  "border-2 border-black bg-[#6F6F6F] px-4 py-3 text-white " +
   "shadow-[inset_2px_2px_0_#AAAAAA,inset_-2px_-2px_0_#4A4A4A] " +
   "[text-shadow:2px_2px_0_#3F3F3F] font-['Pixelify_Sans'] [image-rendering:pixelated]";
 
-const mcButtonInteractive =
-  mcButton +
-  " cursor-pointer hover:bg-[#7E88BF] " +
-  "hover:shadow-[inset_2px_2px_0_#BEC6F0,inset_-2px_-2px_0_#4E5788] " +
-  "active:shadow-[inset_-2px_-2px_0_#AAAAAA,inset_2px_2px_0_#4A4A4A]";
-
 const slotStyle =
-  "relative h-11 w-11 sm:h-14 sm:w-14 shrink-0 bg-[#8B8B8B] p-1 cursor-pointer " +
+  "relative h-14 w-14 shrink-0 bg-[#8B8B8B] p-1 cursor-pointer " +
   "shadow-[inset_2px_2px_0_#373737,inset_-2px_-2px_0_#FFFFFF]";
 
-// Tallet nede i høyre hjørne, som antall items i en stack
 const stackCount =
   "absolute bottom-0 right-1 text-lg leading-none text-white " +
   "[text-shadow:2px_2px_0_#3F3F3F] font-['Pixelify_Sans'] pointer-events-none";
 
 export const PostCard = ({ post }: PostCardProps) => {
-  const [realmName, setRealmName] = useState<string | null>(null);
-  const [likesCount, setLikesCount] = useState(0);
-  const [dislikesCount, setDislikesCount] = useState(0);
+  // Realm
+  const {
+    data: realm,
+    loading: realmLoading,
+    error: realmError,
+  } = useFetch(() => fetchRealm(post.realmId), null, [post.realmId]);
 
-  const [, setTic] = useState(0);
-  const handleLike = () => {
-    setLikesCount(likesCount + 1);
-    //setTic((t) => t + 1);
-  };
+  // Author
+  const {
+    data: author,
+    loading: authorLoading,
+    error: authorError,
+  } = useFetch(() => getUser(post.authorId), null, [post.authorId]);
 
-  const handleDislike = () => {
-    setDislikesCount(dislikesCount + 1);
-    //setTic((t) => t + 1);
-  };
+  if (realmLoading || authorLoading) return <p>Loading...</p>;
+  if (realmError) return <p>Error: {realmError}</p>;
+  if (authorError) return <p>Error: {authorError}</p>;
 
-  const { data, error, loading } = useFetch(
-    () => fetchRealm(post.realmId),
-    null,
-  );
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (data && !realmName) {
-    setRealmName(data?.name ?? null);
-  }
+  const realmName = realm?.name ?? `Realm ${post.realmId}`;
+  const authorName =
+    (author as any)?.name ??
+    (author as any)?.username ??
+    post.authorId;
 
   return (
-    <article
-      className={`flex flex-wrap gap-3 sm:flex-nowrap sm:gap-4 ${mcButton}`}
-    >
+    <article className={`flex gap-4 items-stretch ${mcButton}`}>
+      {/* Venstre kolonne: likes/dislikes */}
       <div className="flex flex-col gap-2 justify-around">
         <button
           type="button"
           aria-label={`Lik (${post.likes})`}
           className={`${slotStyle} hover:bg-green-500`}
-          onClick={handleLike}
         >
           <img
             src="/assets/icons/svg/Like.svg"
             alt=""
             className="h-full w-full object-contain [image-rendering:pixelated]"
           />
-          <span className={stackCount}>{likesCount}</span>
+          <span className={stackCount}>{post.likes}</span>
         </button>
         <button
           type="button"
           aria-label={`Mislik (${post.dislikes})`}
           className={`${slotStyle} hover:bg-red-500`}
-          onClick={handleDislike}
         >
           <img
             src="/assets/icons/svg/Dislike.svg"
             alt=""
             className="h-full w-full object-contain [image-rendering:pixelated]"
           />
-          <span className={stackCount}>{dislikesCount}</span>
+          <span className={stackCount}>{post.dislikes}</span>
         </button>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 break-words">
-        <h3>
-          {post.title} – postet i {realmName}
-        </h3>
-        <p>{post.content}</p>
+      {/* Midtkolonne: author + tittel + innhold */}
+      <div className="flex w-full flex-col gap-2">
+        {/* Øverste linje: author + realm */}
+        <div className="flex justify-between items-center text-xs text-[#E0E0E0]">
+          <span>
+            Author:{" "}
+            <span className="text-white">
+              {authorName}
+            </span>
+          </span>
+          <span className="italic">
+            realm/{realmName}
+          </span>
+        </div>
+
+        {/* Tittel-boks (liten, dented, litt mørkere) */}
+        <div
+          className="
+            rounded
+            bg-[#5A5A5A]
+            px-3 py-2
+            border border-black
+            shadow-[inset_2px_2px_0_#3C3C3C,inset_-2px_-2px_0_#777777]
+          "
+        >
+          <h3 className="m-0 text-sm uppercase tracking-wide text-[#FFFFAA]">
+            {post.title}
+          </h3>
+        </div>
+
+        {/* Innholds-boks (større, dented) */}
+        <div
+          className="
+            rounded
+            bg-[#555555]
+            px-3 py-3
+            border border-black
+            shadow-[inset_2px_2px_0_#3C3C3C,inset_-2px_-2px_0_#777777]
+          "
+        >
+          <p className="m-0 text-sm leading-relaxed text-white">
+            {post.content}
+          </p>
+        </div>
       </div>
 
-      <div className="flex w-full items-center gap-2 sm:w-auto sm:flex-col sm:justify-center">
+      {/* Høyre kolonne: knapp til realm */}
+      <div className="flex flex-col justify-center gap-2">
         <button
           type="button"
           aria-label={`Gå til riket (${post.realmId})`}
           className={
-            `h-12 w-12 sm:h-28 sm:w-28 lg:h-40 lg:w-40 shrink-0 bg-[#8B8B8B] p-1 cursor-pointer ` +
+            "h-32 w-32 shrink-0 bg-[#8B8B8B] p-1 cursor-pointer " +
             "shadow-[inset_2px_2px_0_#373737,inset_-2px_-2px_0_#FFFFFF] hover:bg-blue-500"
           }
           onClick={() => (window.location.href = `/realms/${post.realmId}`)}
@@ -108,9 +139,6 @@ export const PostCard = ({ post }: PostCardProps) => {
             className="h-full w-full object-contain [image-rendering:pixelated]"
           />
         </button>
-        <p className="block min-w-0 break-words sm:text-center">
-          realm/{realmName}
-        </p>
       </div>
     </article>
   );

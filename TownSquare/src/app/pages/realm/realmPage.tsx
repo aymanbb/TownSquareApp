@@ -125,7 +125,7 @@ export const RealmPage = ({ realmId }: RealmPageProps) => {
                   <li>
                     <span className="text-[#E0E0E0]">Realm level:</span>{" "}
                     <span>
-                      Level: {/* realm.level ?? 1 */}
+                      1 {/* realm.level ?? 1 */}
                     </span>
                   </li>
                 </ul>
