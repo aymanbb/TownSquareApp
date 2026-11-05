@@ -27,6 +27,19 @@ const stackCount =
 
 export const PostCard = ({ post }: PostCardProps) => {
   const [realmName, setRealmName] = useState<string | null>(null);
+  const [likesCount, setLikesCount] = useState(0);
+  const [dislikesCount, setDislikesCount] = useState(0);
+
+  const [, setTic] = useState(0);
+  const handleLike = () => {
+    setLikesCount(likesCount + 1);
+    //setTic((t) => t + 1);
+  };
+
+  const handleDislike = () => {
+    setDislikesCount(dislikesCount + 1);
+    //setTic((t) => t + 1);
+  };
 
   const { data, error, loading } = useFetch(
     () => fetchRealm(post.realmId),
@@ -40,31 +53,35 @@ export const PostCard = ({ post }: PostCardProps) => {
   }
 
   return (
-    <article className={`flex flex-wrap gap-3 sm:flex-nowrap sm:gap-4 ${mcButton}`}>
+    <article
+      className={`flex flex-wrap gap-3 sm:flex-nowrap sm:gap-4 ${mcButton}`}
+    >
       <div className="flex flex-col gap-2 justify-around">
         <button
           type="button"
           aria-label={`Lik (${post.likes})`}
           className={`${slotStyle} hover:bg-green-500`}
+          onClick={handleLike}
         >
           <img
             src="/assets/icons/svg/Like.svg"
             alt=""
             className="h-full w-full object-contain [image-rendering:pixelated]"
           />
-          <span className={stackCount}>{post.likes}</span>
+          <span className={stackCount}>{likesCount}</span>
         </button>
         <button
           type="button"
           aria-label={`Mislik (${post.dislikes})`}
           className={`${slotStyle} hover:bg-red-500`}
+          onClick={handleDislike}
         >
           <img
             src="/assets/icons/svg/Dislike.svg"
             alt=""
             className="h-full w-full object-contain [image-rendering:pixelated]"
           />
-          <span className={stackCount}>{post.dislikes}</span>
+          <span className={stackCount}>{dislikesCount}</span>
         </button>
       </div>
 
@@ -91,7 +108,9 @@ export const PostCard = ({ post }: PostCardProps) => {
             className="h-full w-full object-contain [image-rendering:pixelated]"
           />
         </button>
-        <p className="block min-w-0 break-words sm:text-center">realm/{realmName}</p>
+        <p className="block min-w-0 break-words sm:text-center">
+          realm/{realmName}
+        </p>
       </div>
     </article>
   );
