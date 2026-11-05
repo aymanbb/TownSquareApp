@@ -15,9 +15,11 @@ export const RealmPage = ({ realmId }: RealmPageProps) => {
     data: realm,
     loading,
     error,
-  } = useFetch<Realm | null>(() => fetchRealm(Number(realmId)), null);
-
-  useEffect(() => {}, [realmId]);
+  } = useFetch<Realm | null>(
+    () => fetchRealm(Number(realmId)),
+    null,
+    [realmId],
+  );
 
   if (loading) {
     return (
