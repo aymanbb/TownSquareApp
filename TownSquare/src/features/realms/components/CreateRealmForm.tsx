@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import type { Realm } from "@/features/realms/types/Realm";
-import type { Result } from "@/features/realms/types/Result";
 import { createRealm } from "@/features/realms/api/realms-api";
 
 type CreateRealmFormProps = {
@@ -41,23 +40,18 @@ export const CreateRealmForm: React.FC<CreateRealmFormProps> = ({
     };
 
     try {
-      const result: Result<Realm> = await createRealm(newRealm);
+      const created = await createRealm(newRealm);
 
-      if (!result.success) {
-        setError(result.error.message);
-        return;
-      }
-
-      if (result.data) {
-        console.log("Created realm:", result.data);
-        onRealmCreated?.(result.data);
-        setName("");
-        setDesc("");
-        onCancel(); // hide form after success
-      }
+      console.log("Created realm:", created);
+      onRealmCreated?.(created);
+      setName("");
+      setDesc("");
+      onCancel(); // hide form after success
     } catch (e) {
       console.error(e);
-      setError("Unexpected error during realm creation");
+      const message =
+        e instanceof Error ? e.message : "Unexpected error during realm creation";
+      setError(message);
     }
   }
 

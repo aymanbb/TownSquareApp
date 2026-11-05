@@ -1,103 +1,93 @@
 import { Realm } from "../types/Realm";
-import { realmsRepository, RealmsRepository } from "../repository/realms-repository";
-import { Result } from "../types/Result";
+import {
+  realmsRepository,
+  RealmsRepository,
+} from "../repository/realms-repository";
 
 export interface RealmsService {
-  list(): Promise<Result<Realm[]>>;
-  get(_id: number): Promise<Result<Realm>>;
-  create(_realmForm: Partial<Realm>): Promise<Result<Realm>>;
-  follow(_userId: string, _realmId: string): Promise<Result<string>>;
+  list(): Promise<Realm[]>;
+  get(_id: number): Promise<Realm>;
+  create(_realmForm: Partial<Realm>): Promise<Realm>;
+  follow(_userId: string, _realmId: string): Promise<void>;
   checkFollow(_userId: string, _realmId: string): Promise<boolean>;
 }
 
-function createRealmsService(_repository: RealmsRepository): RealmsService {
+function createRealmsService(repository: RealmsRepository): RealmsService {
   return {
-    async list() {
+    async list(): Promise<Realm[]> {
       try {
-        const realms = await _repository.list();
-        return { success: true, data: realms };
+        return await repository.list();
       } catch (e) {
-        console.error("Service error (list): ", e);
-        return {
-          success: false,
-          error: {
-            message: "Failed to list realms",
-            code: 500,
-          },
-        };
+        console.error("RealmsService.list error:", e);
+        throw new Error("Failed to list realms");
       }
     },
 
-    async get(_id: number) {
-      try {
-        if (Number.isNaN(_id)) {
-          throw new Error("ID must be a number.");
-        }
+    async get(_id: number): Promise<Realm> {
+      if (!Number.isFinite(_id)) {
+        throw new Error("ID must be a number.");
+      }
 
-        const result = await _repository.get(_id);
-        return { success: true, data: result };
+      try {
+        return await repository.get(_id);
       } catch (e) {
-        console.error("Service error (get): ", e);
-        
-        const message = e instanceof Error ? e.message : "Failed to fetch realm";
-        const isValidationError = message === "ID must be a number."
+        console.error("RealmsService.get error:", e);
 
-        return {
-          success: false,
-          error: {
-            message: message,
-            code: isValidationError ? 400 : 500,
-          }
+        if (e instanceof Error) {
+          throw e;
         }
+        throw new Error("Failed to fetch realm");
       }
     },
 
-    async create(_realmForm: Partial<Realm>): Promise<Result<Realm>> {
-      try {
-          const realm = await _repository.create(_realmForm);
-          return { success: true, data: realm };
-      } catch (e){
-        console.error("Service error (create): ", e);
-        
-        const message = e instanceof Error ? e.message : "Failed to create realm";
-        const isValidationError = message === "Name is required.";
+    async create(_realmForm: Partial<Realm>): Promise<Realm> {
+      if (!_realmForm.name) {
+        throw new Error("Name is required.");
+      }
 
-        return {
-          success: false,
-          error: {
-            message: message,
-            code: isValidationError ? 400 : 500,
-          },
-        };
+      try {
+        return await repository.create(_realmForm);
+      } catch (e) {
+        console.error("RealmsService.create error:", e);
+
+        if (e instanceof Error) {
+          throw e;
+        }
+        throw new Error("Failed to create realm");
       }
     },
 
-    async follow(_userId: string, _realmId: string): Promise<Result<string>> {
-      try {
-        console.log("(service) ATTAAAAAAAAAAAAAAAAAAAACk")
-        const result = await _repository.follow(_userId, _realmId);
-        return { success: true, data: "You have followed this realm" };
-      } catch (e){
-        console.error("Service error (create): ", e);
-        
-        const message = e instanceof Error ? e.message : "Failed to follow realm";
+    async follow(_userId: string, _realmId: string): Promise<void> {
+      if (!_userId || !_realmId) {
+        throw new Error("User ID and realm ID are required.");
+      }
 
-        return {
-          success: false,
-          error: {
-            message: message,
-            code: 400,
-          },
-        };
+      try {
+        await repository.follow(_userId, _realmId);
+      } catch (e) {
+        console.error("RealmsService.follow error:", e);
+
+        if (e instanceof Error) {
+          throw e;
+        }
+        throw new Error("Failed to follow realm");
       }
     },
 
     async checkFollow(_userId: string, _realmId: string): Promise<boolean> {
+      if (!_userId || !_realmId) {
+        throw new Error("User ID and realm ID are required.");
+      }
+
       try {
-        return await realmsRepository.checkFollow(_userId, _realmId);
+        return await repository.checkFollow(_userId, _realmId);
       } catch (e) {
-        console.error("Service error (checkFollow):", e);
-        return false;
+        console.error("RealmsService.checkFollow error:", e);
+
+        if (e instanceof Error) {
+          throw e;
+        }
+        throw new Error("Failed to check follow status");
       }
     },
   };

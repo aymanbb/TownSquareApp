@@ -1,108 +1,86 @@
 import type { Realm } from "../types/Realm";
-import type { Result } from "../types/Result";
 
+// Henter alle realms
 export async function listRealms(): Promise<Realm[]> {
-  try {
-    const response = await fetch("/api/v1/realms");
+  const res = await fetch("/api/v1/realms", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 
-    const result: Result<Realm[]> = await response.json();
-    if (!result.success) {
-      throw new Error(result.error?.message || "Kunne ikke hente realms");
-    }
-    return result.data ?? [];
-  } catch (e: any) {
-    console.error(e);
-    return [];
+  if (!res.ok) {
+    const errorBody = (await res.json()) as { message?: string };
+    throw new Error(errorBody.message || "Kunne ikke hente realms");
   }
+
+  return (await res.json()) as Realm[];
 }
 
+// Henter ett realm
 export async function fetchRealm(_id: number): Promise<Realm> {
-  const response = await fetch(`/api/v1/realms/${_id}`);
+  const res = await fetch(`/api/v1/realms/${_id}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 
-  const result: Result<Realm> = await response.json();
-
-  if (!result.success) {
-    throw new Error(result.error?.message || "Kunne ikke hente realms");
+  if (!res.ok) {
+    const errorBody = (await res.json()) as { message?: string };
+    throw new Error(errorBody.message || "Kunne ikke hente realms");
   }
 
-  return result.data!;
+  return (await res.json()) as Realm;
 }
 
+// Oppretter et nytt realm
 export async function createRealm(
   _realmForm: Partial<Realm>,
-): Promise<Result<Realm>> {
-  try {
-    const response = await fetch("/api/v1/realms", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(_realmForm),
-    });
+): Promise<Realm> {
+  const res = await fetch("/api/v1/realms", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(_realmForm),
+  });
 
-    const body = (await response.json()) as Result<Realm>;
-
-    return body;
-  } catch (e: any) {
-    console.error(e);
-    return {
-      success: false,
-      error: {
-        message: e.error.message,
-        code: e.error.code,
-      },
-    };
+  if (!res.ok) {
+    const errorBody = (await res.json()) as { message?: string };
+    throw new Error(errorBody.message || "Kunne ikke opprette realm");
   }
+
+  return (await res.json()) as Realm;
 }
 
+// Følger et realm
 export async function followRealm(
   _userId: string,
   _realmId: string,
-): Promise<Result<void>> {
-  try {
-    const response = await fetch(`/api/v1/realms?followRealm=${_realmId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: _userId }),
-    });
-    if (!response.ok) {
-      return {
-        success: false,
-        error: {
-          code: response.status,
-          message: "Failed to follow realm",
-        },
-      };
-    }
+): Promise<void> {
+  const res = await fetch(`/api/v1/realms?followRealm=${_realmId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId: _userId }),
+  });
 
-    return { success: true, data: undefined };
-  } catch (e: any) {
-    console.error(e);
-    return {
-      success: false,
-      error: {
-        message: e.error.message,
-        code: e.error.code,
-      },
-    };
+  if (!res.ok) {
+    const errorBody = (await res.json()) as { message?: string };
+    throw new Error(errorBody.message || "Failed to follow realm");
   }
 }
 
-export async function checkFollow(_userId: string, _realmId: string): Promise<boolean> {
-  try {
-    const response = await fetch(`/api/v1/realms/check-follow?realmId=${_realmId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: _userId }),
-    });
-    console.log("api response: ", response);
+// Sjekker om bruker følger et realm
+export async function checkFollow(
+  userId: string,
+  realmId: string,
+): Promise<boolean> {
+  const res = await fetch(`/api/v1/realms/check-follow?realmId=${realmId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId }),
+  });
 
-    if (!response.ok) {
-      return false;
-    }
-
-    const body = await response.json() as { follows: boolean };
-    return !!body.follows;
-  } catch (e: any) {
-    console.error(e);
-    return false;
+  if (!res.ok) {
+    const err = (await res.json()) as { message?: string };
+    throw new Error(err.message || "Failed to check follow status");
   }
+
+  const body = (await res.json()) as { isFollowing: boolean };
+  return body.isFollowing;
 }
