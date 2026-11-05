@@ -21,7 +21,6 @@ export const RealmPostFeed: React.FC<RealmPostFeedProps> = ({ realmId }) => {
 
   return (
     <div className="post-feed">
-      <PostFeedHeader />
       <PostList posts={data} />
     </div>
   );
