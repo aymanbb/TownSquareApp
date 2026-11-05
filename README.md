@@ -59,6 +59,13 @@ CLOUDFLARE_D1_TOKEN=<API token with D1 access>
 
 ### 3. Database
 
+Create d1 database:
+
+```bash
+wrangler d1 create townsquare-db
+```
+
+wrangler d1 create townsquare-db
 Apply the migrations to the local D1 database and fill it with test data:
 
 ```bash
