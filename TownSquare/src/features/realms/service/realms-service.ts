@@ -9,6 +9,7 @@ export interface RealmsService {
   get(_id: number): Promise<Realm>;
   create(_realmForm: Partial<Realm>): Promise<Realm>;
   follow(_userId: string, _realmId: string): Promise<void>;
+  checkFollow(_userId: string, _realmId: string): Promise<boolean>;
 }
 
 function createRealmsService(repository: RealmsRepository): RealmsService {
@@ -33,16 +34,13 @@ function createRealmsService(repository: RealmsRepository): RealmsService {
         console.error("RealmsService.get error:", e);
 
         if (e instanceof Error) {
-          // Behold spesifikke meldinger fra repo, f.eks. "Realm not found"
           throw e;
         }
-
         throw new Error("Failed to fetch realm");
       }
     },
 
     async create(_realmForm: Partial<Realm>): Promise<Realm> {
-      // Enkel validering i service-laget
       if (!_realmForm.name) {
         throw new Error("Name is required.");
       }
@@ -53,10 +51,8 @@ function createRealmsService(repository: RealmsRepository): RealmsService {
         console.error("RealmsService.create error:", e);
 
         if (e instanceof Error) {
-          // Repo bruker "Failed to create realm" for interne feil
           throw e;
         }
-
         throw new Error("Failed to create realm");
       }
     },
@@ -74,8 +70,24 @@ function createRealmsService(repository: RealmsRepository): RealmsService {
         if (e instanceof Error) {
           throw e;
         }
-
         throw new Error("Failed to follow realm");
+      }
+    },
+
+    async checkFollow(_userId: string, _realmId: string): Promise<boolean> {
+      if (!_userId || !_realmId) {
+        throw new Error("User ID and realm ID are required.");
+      }
+
+      try {
+        return await repository.checkFollow(_userId, _realmId);
+      } catch (e) {
+        console.error("RealmsService.checkFollow error:", e);
+
+        if (e instanceof Error) {
+          throw e;
+        }
+        throw new Error("Failed to check follow status");
       }
     },
   };

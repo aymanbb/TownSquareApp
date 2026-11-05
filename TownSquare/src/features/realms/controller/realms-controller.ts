@@ -6,6 +6,7 @@ export interface RealmsController {
   get(_id: number): Promise<Response>;
   create(_realmForm: Partial<Realm>): Promise<Response>;
   follow(_userId: string, _realmId: string): Promise<Response>;
+  checkFollow(_userId: string, _realmId: string): Promise<Response>;
 }
 
 function createRealmsController(service: RealmsService): RealmsController {
@@ -108,6 +109,32 @@ function createRealmsController(service: RealmsService): RealmsController {
           message === "User ID and realm ID are required." ||
           message === "Ugyldig input" // hvis du legger til noe slikt senere
         ) {
+          status = 400;
+        }
+
+        return new Response(JSON.stringify({ message }), {
+          status,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+    },
+
+     async checkFollow(userId: string, realmId: string) {
+      try {
+        const isFollowing = await service.checkFollow(userId, realmId);
+
+        return new Response(JSON.stringify({ isFollowing }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      } catch (e) {
+        console.error("RealmsController.checkFollow error:", e);
+
+        const message =
+          e instanceof Error ? e.message : "Failed to check follow status";
+
+        let status = 500;
+        if (message === "User ID and realm ID are required.") {
           status = 400;
         }
 

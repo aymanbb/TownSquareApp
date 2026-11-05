@@ -12,8 +12,4 @@ export const postRoutes = [
     get: async ({ params }) =>
       Response.json(await postController.get(Number(params.id))),
   }),
-  route("/api/v1/posts/realm/:realmId", {
-    get: async ({ params }) =>
-      Response.json(await postController.listByRealm(Number(params.realmId))),
-  })
 ];

@@ -42,7 +42,7 @@ export async function getPostById(id: string): Promise<Post> {
 }
 
 export async function listPostsByRealm(realmId: number): Promise<Post[]> {
-  const res = await fetch(`/api/v1/posts/realm/${realmId}`, {
+  const res = await fetch(`/api/v1/realms/posts/${realmId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
