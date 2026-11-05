@@ -1,4 +1,3 @@
-import React from "react";
 import type { Post } from "../../types/Post";
 import { fetchRealm } from "@/features/realms/api/realms-api";
 import { useFetch } from "@/features/utils/useFetch";
