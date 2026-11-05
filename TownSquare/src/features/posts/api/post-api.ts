@@ -1,57 +1,98 @@
 import type { Post } from "../types/Post";
+import type { Result } from "../utils/Result";
 
-// Henter alle poster
+// Fetches the list of posts from the API and returns them as an array of Post objects.
 export async function listPosts(): Promise<Post[]> {
+  // console.log("Fetching posts from API...");
+  // console.log("Requesting URL: /api/v1/posts");
+  // console.log("Awaiting response...");
+
   const res = await fetch("/api/v1/posts", {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
-  if (!res.ok) {
-    const errorBody = (await res.json()) as { message?: string };
-    throw new Error(errorBody.message || "Kunne ikke hente poster");
+  // console.log("Response received, parsing JSON...");
+  const result: Result<Post[]> = await res.json();
+  // console.log("Parsed JSON result:", result);
+
+  if (!result.success) {
+    throw new Error(result.error?.message || "Kunne ikke hente poster");
   }
 
-  return (await res.json()) as Post[];
+  // console.log("Returning post data:", result.data ?? []);
+  return result.data ?? [];
 }
 
-// Henter én post
-export async function getPostById(id: string | number): Promise<Post> {
+export async function getPostById(id: string): Promise<Post> {
+  // console.log(`Fetching post with ID: ${id} from API...`);
   const res = await fetch(`/api/v1/posts/${id}`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
-
-  if (!res.ok) {
-    const errorBody = (await res.json()) as { message?: string };
-    throw new Error(errorBody.message || "Kunne ikke hente posten");
+  const result: Result<Post> = await res.json();
+  if (!result.success) {
+    throw new Error(result.error?.message || "Kunne ikke hente posten");
   }
-
-  return (await res.json()) as Post;
+  return result.data!;
 }
 
-// Henter poster for et realm
 export async function listPostsByRealm(realmId: number): Promise<Post[]> {
   const res = await fetch(`/api/v1/realms/posts/${realmId}`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
-  const body = await res.json();
-  console.log(
-    "listPostsByRealm HTTP body:",
-    body,
-    "| isArray:",
-    Array.isArray(body),
-  );
+  const result: Result<Post[]> = await res.json();
+
+  if (!result.success) {
+    throw new Error(
+      result.error?.message || "Kunne ikke hente poster for dette realmet",
+    );
+  }
+
+  return result.data ?? [];
+}
+
+// Ny, uten Result-wrapper – matcher controller som returnerer ren Post som JSON
+export async function createPost(
+  newPost: Partial<Post>,
+): Promise<Post> {
+  const res = await fetch("/api/v1/posts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newPost),
+  });
+
+  let bodyText: string | undefined;
+
+  try {
+    bodyText = await res.text();
+  } catch {
+    bodyText = undefined;
+  }
 
   if (!res.ok) {
-    const message =
-      (body as { message?: string }).message ||
-      "Kunne ikke hente poster for dette realmet";
+    console.error("POST /api/v1/posts failed:", res.status, res.statusText, bodyText);
+
+    let message = "Kunne ikke opprette posten";
+    try {
+      const json = JSON.parse(bodyText || "{}") as { message?: string };
+      if (json.message) message = json.message;
+    } catch {
+      // ignore
+    }
     throw new Error(message);
   }
 
-  // For now, just return what we *think* it is:
-  return body as Post[];
+  const created = bodyText ? (JSON.parse(bodyText) as Post) : ({} as Post);
+  return created;
 }

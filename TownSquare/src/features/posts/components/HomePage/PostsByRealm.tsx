@@ -13,7 +13,7 @@ type RealmPostFeedProps = {
 export const RealmPostFeed: React.FC<RealmPostFeedProps> = ({ realmId }) => {
   const { data, loading, error } = useFetch<Post[]>(
     () => listPostsByRealm(realmId),
-    [realmId],
+    [],
   );
 
   if (loading) return <Buffering />;

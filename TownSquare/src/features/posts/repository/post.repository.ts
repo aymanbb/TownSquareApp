@@ -3,8 +3,6 @@ import { db } from "@/db";
 import { post } from "@/db/schema/post-schema";
 import { eq } from "drizzle-orm";
 
-
-
 export interface IPostRepository {
   create: (post: Partial<Post>) => Promise<Post>;
   remove: (id: number) => Promise<any>;
@@ -40,7 +38,7 @@ export function createPostRepository(_db: typeof db): IPostRepository {
       try {
         const now = new Date().toISOString();
 
-        const inserted = await _db
+        const inserted = await db
           .insert(post)
           .values({
             title: postForm.title,
@@ -61,6 +59,7 @@ export function createPostRepository(_db: typeof db): IPostRepository {
       }
     },
 
+
     remove: async (id: number) => {
       throw new Error("Not implemented");
     },
@@ -70,54 +69,25 @@ export function createPostRepository(_db: typeof db): IPostRepository {
     },
 
     get: async (id: number) => {
-      try {
-        const row = await _db
-          .select()
-          .from(post)
-          .where(eq(post.id, id))
-          .get();
-
-        if (!row) {
-          throw new Error("Post not found");
-        }
-
-        return toPost(row);
-      } catch (e) {
-        if (e instanceof Error) {
-          console.error("PostRepository.get error:", e);
-          // Behold spesifikke meldinger som "Post not found"
-          throw e;
-        }
-
-        console.error("PostRepository.get unknown error:", e);
-        throw new Error("Failed to get post");
+      const row = await _db.select().from(post).where(eq(post.id, id)).get();
+      if (!row) {
+        throw new Error(`Post with id ${id} not found`);
       }
+      return toPost(row);
     },
 
     list: async () => {
-      try {
-        const rows = await _db.select().from(post).all();
-        return rows.map(toPost);
-      } catch (e) {
-        console.error("PostRepository.list error:", e);
-        throw new Error("Failed to list posts");
-      }
+      const rows = await _db.select().from(post).all();
+      return rows.map(toPost);
     },
 
     listByRealm: async (realmId: number) => {
-      try {
-        const rows = await _db
-          .select()
-          .from(post)
-          .where(eq(post.realm_id, realmId))
-          .all();
-        console.log("REPO ROWS: ", rows);
-        console.log("REPO TOPOST: ", rows.map(toPost));
-        return rows.map(toPost);
-      } catch (e) {
-        console.error("PostRepository.listByRealm error:", e);
-        throw new Error("Failed to list posts for realm");
-      }
+      const rows = await _db
+        .select()
+        .from(post)
+        .where(eq(post.realm_id, realmId))
+        .all();
+      return rows.map(toPost);
     },
   };
 }
