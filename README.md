@@ -59,6 +59,13 @@ CLOUDFLARE_D1_TOKEN=<API token with D1 access>
 
 ### 3. Database
 
+Create d1 database:
+
+```bash
+wrangler d1 create townsquare-db
+```
+
+wrangler d1 create townsquare-db
 Apply the migrations to the local D1 database and fill it with test data:
 
 ```bash
@@ -91,7 +98,22 @@ Open the URL shown in the terminal (usually `http://localhost:5173`).
 | `pnpm migrate:dev`  | Applies migrations to the local D1 database         |
 | `pnpm migrate:prod` | Applies migrations to the D1 database on Cloudflare |
 | `pnpm seed`         | Fills the database with test data                   |
+| `pnpm test`         | Runs the integration tests                          |
+| `pnpm test:watch`   | Runs the tests in watch mode                        |
 | `pnpm release`      | Builds and deploys to Cloudflare Workers            |
+
+## Testing
+
+Integration tests use [Vitest](https://vitest.dev/) with [`@cloudflare/vitest-plugin`](https://developers.cloudflare.com/workers/testing/vitest-integration/). They run inside the Workers runtime against a **local, empty D1 database**, so they never touch the real database on Cloudflare and need no tokens.
+
+```bash
+pnpm test
+```
+
+- `vitest.config.mts` sets up the test Worker and the `DB` binding
+- `test/apply-migrations.ts` creates the tables from the migrations in `drizzle/` before the tests run
+- `test/helpers.ts` contains helpers to reset the database and create users, realms and posts
+- Tests live next to each feature in `src/features/<feature>/__tests__/*.test.ts` and test the full chain controller → service → repository → database
 
 ## Project structure
 
