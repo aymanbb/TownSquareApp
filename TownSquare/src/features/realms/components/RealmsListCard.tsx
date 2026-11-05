@@ -41,9 +41,8 @@ export const RealmsListCard: React.FC<RealmsListCardProps> = ({ realm }) => {
   return (
     <article
       className="
-        flex 
-        items-center 
-        justify-between 
+        flex flex-col items-start gap-3
+        sm:flex-row sm:items-center sm:justify-between 
         w-full 
         bg-[url('/assets/textures/png/brick-texture.png')] 
         bg-repeat bg-[length:70px_70px] 
@@ -59,7 +58,7 @@ export const RealmsListCard: React.FC<RealmsListCardProps> = ({ realm }) => {
         <h2 className="m-0 text-lg tracking-wide uppercase text-amber-300 drop-shadow-md">
           {realm.name}
         </h2>
-        <p className="mt-2 mb-0 text-sm leading-relaxed">
+        <p className="mt-2 mb-0 break-words text-sm leading-relaxed">
           {realm.description}
         </p>
       </div>

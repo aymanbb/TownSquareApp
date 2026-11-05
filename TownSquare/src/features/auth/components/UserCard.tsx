@@ -10,7 +10,7 @@ const formatDate = (value: unknown) =>
 
 // Minecraft-knapp: grå flate, lys kant oppe/venstre, mørk kant nede/høyre, svart ramme rundt
 const buttonStyle =
-  "flex w-full items-center gap-5 px-5 py-3 " +
+  "flex w-full items-center gap-2 px-2 py-3 sm:gap-5 sm:px-5 " +
   "bg-[#6F6F6F] border-2 border-black rounded-none " +
   "shadow-[inset_2px_2px_0_#AAAAAA,inset_-2px_-2px_0_#4A4A4A] " +
   "font-['Pixelify_Sans'] text-white [text-shadow:2px_2px_0_#3F3F3F] " +
@@ -19,7 +19,7 @@ const buttonStyle =
 
 // Inventory-slot: mørk kant oppe/venstre, lys kant nede/høyre
 const slotStyle =
-  "h-14 w-14 shrink-0 bg-[#8B8B8B] p-1 " +
+  "h-10 w-10 sm:h-14 sm:w-14 shrink-0 bg-[#8B8B8B] p-1 " +
   "shadow-[inset_2px_2px_0_#373737,inset_-2px_-2px_0_#FFFFFF]";
 
 export const UserCard = ({ user, rankedSpot }: UserProp) => {
@@ -27,7 +27,7 @@ export const UserCard = ({ user, rankedSpot }: UserProp) => {
 
   return (
     <div className={buttonStyle}>
-      <div className="w-12 text-center text-2xl text-[#FFFF55] [text-shadow:2px_2px_0_#3F3F15]">
+      <div className="w-8 shrink-0 text-center text-lg sm:w-12 sm:text-2xl text-[#FFFF55] [text-shadow:2px_2px_0_#3F3F15]">
         #{rankedSpot}
       </div>
 
@@ -42,13 +42,13 @@ export const UserCard = ({ user, rankedSpot }: UserProp) => {
       <div className="min-w-0 flex-1">
         <h2 className="m-0 truncate text-lg">{user.displayName ?? name}</h2>
         <p className="my-1 text-[#E0E0E0]">@{name}</p>
-        {user.bio && <p className="my-2 text-sm text-[#E0E0E0]">{user.bio}</p>}
+        {user.bio && <p className="my-2 break-words text-sm text-[#E0E0E0]">{user.bio}</p>}
         <p className="m-0 text-xs text-[#D0D0D0]">
           Joined: {formatDate(user.createdAt)}
         </p>
       </div>
 
-      <div className="flex min-w-16 flex-col items-center">
+      <div className="flex shrink-0 flex-col items-center sm:min-w-16">
         <span className="text-[10px] tracking-widest text-[#E0E0E0]">
           LEVEL
         </span>

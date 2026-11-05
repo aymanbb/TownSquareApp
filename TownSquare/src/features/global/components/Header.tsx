@@ -9,9 +9,10 @@ export function Header({ children }: HeaderProps) {
   return (
     <header
       className="flex flex-col justify-end items-end
-      h-80 w-full
+      min-h-48 w-full pt-20 md:h-80 md:pt-0
+      short:h-auto short:min-h-0 short:pt-16
       bg-[url('/assets/textures/png/HeaderBackground-texture.png')]
-      bg-[length:100%_auto]
+      bg-cover lg:bg-[length:100%_auto]
       bg-center bg-no-repeat"
     >
       {children}

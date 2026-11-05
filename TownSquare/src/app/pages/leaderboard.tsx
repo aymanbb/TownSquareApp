@@ -11,10 +11,10 @@ export function Leaderboard() {
           <img
             src="/assets/icons/svg/Golden_Crown.svg"
             alt="Trophy icon"
-            className="h-20 w-20 shrink-0 text-[#FFAA00] drop-shadow-[2px_2px_0_#3F2A00]"
+            className="h-12 w-12 sm:h-20 sm:w-20 shrink-0 text-[#FFAA00] drop-shadow-[2px_2px_0_#3F2A00]"
           />
 
-          <h1 className="m-0 text-4xl uppercase tracking-wider text-[#FFFF55] [text-shadow:3px_3px_0_#3F3F15] sm:text-5xl">
+          <h1 className="m-0 text-2xl uppercase tracking-wider sm:text-4xl md:text-5xl text-[#FFFF55] [text-shadow:3px_3px_0_#3F3F15]">
             Leaderboard
           </h1>
         </div>

@@ -62,7 +62,8 @@ export const CreateRealmForm: React.FC<CreateRealmFormProps> = ({
         rounded-xl
         border-2 border-white
         bg-black
-        p-6
+        p-4 sm:p-6
+        max-h-full overflow-y-auto
         shadow-2xl
         text-white
       "

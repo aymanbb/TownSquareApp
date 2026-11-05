@@ -14,7 +14,7 @@ export const RealmsList: React.FC<RealmsListProps> = ({ realms }) => {
   }
 
   return (
-    <section className="flex flex-col gap-3 w-full mt-4 px-4"
+    <section className="flex flex-col gap-3 w-full mt-4 sm:px-4"
     >
       {realms.map((realm) => (
         <RealmsListCard key={realm.id} realm={realm} />

@@ -17,7 +17,7 @@ const mcButtonInteractive =
   "active:shadow-[inset_-2px_-2px_0_#AAAAAA,inset_2px_2px_0_#4A4A4A]";
 
 const slotStyle =
-  "relative h-14 w-14 shrink-0 bg-[#8B8B8B] p-1 cursor-pointer " +
+  "relative h-11 w-11 sm:h-14 sm:w-14 shrink-0 bg-[#8B8B8B] p-1 cursor-pointer " +
   "shadow-[inset_2px_2px_0_#373737,inset_-2px_-2px_0_#FFFFFF]";
 
 // Tallet nede i høyre hjørne, som antall items i en stack
@@ -40,7 +40,7 @@ export const PostCard = ({ post }: PostCardProps) => {
   }
 
   return (
-    <article className={`flex gap-4 ${mcButton}`}>
+    <article className={`flex flex-wrap gap-3 sm:flex-nowrap sm:gap-4 ${mcButton}`}>
       <div className="flex flex-col gap-2 justify-around">
         <button
           type="button"
@@ -68,19 +68,19 @@ export const PostCard = ({ post }: PostCardProps) => {
         </button>
       </div>
 
-      <div className="flex w-full flex-col justify-center gap-2">
+      <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 break-words">
         <h3>
           {post.title} – postet i {realmName}
         </h3>
         <p>{post.content}</p>
       </div>
 
-      <div className="flex flex-col justify-center gap-2">
+      <div className="flex w-full items-center gap-2 sm:w-auto sm:flex-col sm:justify-center">
         <button
           type="button"
           aria-label={`Gå til riket (${post.realmId})`}
           className={
-            `h-40 w-40 shrink-0 bg-[#8B8B8B] p-1 cursor-pointer ` +
+            `h-12 w-12 sm:h-28 sm:w-28 lg:h-40 lg:w-40 shrink-0 bg-[#8B8B8B] p-1 cursor-pointer ` +
             "shadow-[inset_2px_2px_0_#373737,inset_-2px_-2px_0_#FFFFFF] hover:bg-blue-500"
           }
           onClick={() => (window.location.href = `/realms/${post.realmId}`)}
@@ -91,7 +91,7 @@ export const PostCard = ({ post }: PostCardProps) => {
             className="h-full w-full object-contain [image-rendering:pixelated]"
           />
         </button>
-        <p className="text-center block">realm/{realmName}</p>
+        <p className="block min-w-0 break-words sm:text-center">realm/{realmName}</p>
       </div>
     </article>
   );

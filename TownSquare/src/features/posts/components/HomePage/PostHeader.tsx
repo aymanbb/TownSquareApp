@@ -13,7 +13,7 @@ const mcButtonInteractive =
 
 export const PostFeedHeader = () => {
   return (
-    <div className="flex items-center justify-between gap-3 bg-[url('/assets/textures/png/footer-stone.png')]  bg-repeat bg-[length:150px_150px] bg-opacity-50 p-4 rounded-lg outline-solid outline-black">
+    <div className="flex flex-wrap items-center justify-between gap-3 bg-[url('/assets/textures/png/footer-stone.png')]  bg-repeat bg-[length:150px_150px] bg-opacity-50 p-4 rounded-lg outline-solid outline-black">
       <button type="button" className={`${mcButtonInteractive} text-sm`}>
         Sorted by Alphabetical
       </button>

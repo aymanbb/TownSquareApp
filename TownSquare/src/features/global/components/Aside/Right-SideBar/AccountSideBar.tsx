@@ -13,7 +13,7 @@ export const AccountSideBar = () => {
      "
     >
       <div
-        className="flex h-screen w-full flex-col gap-y-6 relative overflow-hidden
+        className="flex w-full flex-col gap-y-6 sm:flex-row sm:flex-wrap sm:gap-x-8 lg:h-screen lg:flex-col lg:flex-nowrap relative overflow-hidden
          shadow-[inset_0_0_4px_4px_rgba(0,0,0,0.85)]
         bg-[url('/assets/textures/png/brick-texture.png')]
         bg-repeat bg-[length:70px_70px]

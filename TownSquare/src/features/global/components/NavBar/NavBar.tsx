@@ -1,5 +1,5 @@
 import { SearchField } from "./SearchButton";
-const iconSize = "h-12 w-12";
+const iconSize = "h-8 w-8 sm:h-12 sm:w-12 short:h-8 short:w-8";
 const fog = `relative isolate z-50
   before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded
   relative isolate
@@ -14,13 +14,13 @@ export const NavBar = () => {
   return (
     <nav
       id="site-nav"
-      className={`flex w-full items-center justify-between gap-4 px-4 py-2 ${fog}`}
+      className={`flex w-full flex-col items-stretch gap-2 px-2 py-2 sm:px-4 md:flex-row md:items-center md:justify-between md:gap-4 ${fog}`}
     >
-      <ul className="m-0 flex flex-1 list-none justify-evenly p-0">
-        <li className="w-44">
+      <ul className="m-0 flex flex-1 list-none justify-evenly gap-1 p-0">
+        <li className="min-w-0 flex-1 md:max-w-44">
           <a
             href="/"
-            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50 font-['MinecraftiaRegular']"
+            className="flex flex-col items-center justify-center gap-1 rounded py-1 text-xs text-white hover:bg-blue-400/50 font-['MinecraftiaRegular'] sm:flex-row sm:gap-2 sm:py-2 sm:text-base"
           >
             <img
               src="/assets/icons/svg/HomeIcon.svg"
@@ -30,10 +30,10 @@ export const NavBar = () => {
             Home
           </a>
         </li>
-        <li className="w-44">
+        <li className="min-w-0 flex-1 md:max-w-44">
           <a
             href="/realms"
-            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50 font-['MinecraftiaRegular']"
+            className="flex flex-col items-center justify-center gap-1 rounded py-1 text-xs text-white hover:bg-blue-400/50 font-['MinecraftiaRegular'] sm:flex-row sm:gap-2 sm:py-2 sm:text-base"
           >
             <img
               src="/assets/icons/svg/CompassIcon.svg"
@@ -43,10 +43,10 @@ export const NavBar = () => {
             Explore
           </a>
         </li>
-        <li className="w-44">
+        <li className="min-w-0 flex-1 md:max-w-44">
           <a
             href="/leaderboard"
-            className="flex items-center justify-center gap-2 rounded py-2 text-white hover:bg-blue-400/50 font-['MinecraftiaRegular']"
+            className="flex flex-col items-center justify-center gap-1 rounded py-1 text-xs text-white hover:bg-blue-400/50 font-['MinecraftiaRegular'] sm:flex-row sm:gap-2 sm:py-2 sm:text-base"
           >
             <img
               src="/assets/icons/svg/TrophyIcon.svg"

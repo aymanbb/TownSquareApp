@@ -39,7 +39,7 @@ export const RealmsCardButton: React.FC<ButtonProps> = ({
   }
 
   const baseClass =
-    "ml-4 whitespace-nowrap rounded-lg border border-amber-300 " +
+    "shrink-0 whitespace-nowrap sm:ml-4 rounded-lg border border-amber-300 " +
     "bg-black/70 px-3 py-1 text-xs font-semibold text-amber-300 " +
     "hover:bg-black hover:border-amber-200";
 

@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Lav skjermhøyde, f.eks. mobil i landscape */
+@custom-variant short (@media (max-height: 500px));
+
 * {
     box-sizing: border-box;
+}
+
+html,
+body {
+    overflow-x: hidden;
 }

@@ -35,7 +35,9 @@ function AppLayoutInner({ children, requestInfo }: LayoutProps) {
       </Header>
 
       <div
-        className="flex min-h-screen
+        className="grid min-h-screen grid-cols-1 gap-3
+    md:grid-cols-[10rem_minmax(0,1fr)]
+    lg:grid-cols-[10rem_minmax(0,1fr)_15rem]
     relative w-full
     bg-[url('assets/textures/png/BackgroundTexturePanorama.png')]
     bg-cover bg-center
@@ -43,18 +45,19 @@ function AppLayoutInner({ children, requestInfo }: LayoutProps) {
      shadow-[0_0_15px_4px_rgba(0,0,0,0.8)]
   "
       >
-        <aside className="flex h-screen w-40 flex-col">
+        <aside className="order-2 flex flex-col md:order-none md:h-screen short:h-auto">
           <RealmSideBar onCreateRealmClick={isOpen ? closeForm : openForm} />
         </aside>
 
-        <main className="min-w-0 flex-1">{children}</main>
+        <main className="order-1 min-w-0 md:order-none">{children}</main>
 
         {isOpen && (
           <div
             className="
               fixed inset-0 z-50
               flex items-center justify-center
-              bg-black/50
+              bg-black/50 p-4
+              overflow-y-auto
             "
           >
             <CreateRealmForm
@@ -65,12 +68,12 @@ function AppLayoutInner({ children, requestInfo }: LayoutProps) {
           </div>
         )}
 
-        <aside className="flex h-screen w-60 flex-col">
+        <aside className="order-3 flex flex-col md:col-span-2 lg:col-span-1 lg:order-none lg:h-screen">
           <img
             src="/assets/textures/png/TowerBrickTop.png"
             alt="Profile picture"
             aria-hidden="true"
-            className="flex w-full h-40"
+            className="hidden w-full h-40 lg:flex"
           />
           <AccountSideBar />
         </aside>

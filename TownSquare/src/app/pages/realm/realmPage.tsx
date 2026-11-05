@@ -48,14 +48,14 @@ export const RealmPage = ({ realmId }: RealmPageProps) => {
   }
 
   const realmBoxStyle =
-    "flex w-full items-start gap-5 px-5 py-4 " +
+    "flex w-full items-start gap-3 px-3 py-4 sm:gap-5 sm:px-5 " +
     "bg-[#6F6F6F] border-2 border-black rounded-none " +
     "shadow-[inset_2px_2px_0_#AAAAAA,inset_-2px_-2px_0_#4A4A4A] " +
     "font-['Pixelify_Sans'] text-white [text-shadow:2px_2px_0_#3F3F3F] " +
     "[image-rendering:pixelated] select-none";
 
   const realmSlotStyle =
-    "h-16 w-16 shrink-0 bg-[#8B8B8B] p-1 " +
+    "h-12 w-12 sm:h-16 sm:w-16 shrink-0 bg-[#8B8B8B] p-1 " +
     "shadow-[inset_2px_2px_0_#373737,inset_-2px_-2px_0_#FFFFFF]";
 
   const handlePostCreated = (_post: Post) => {
@@ -68,7 +68,7 @@ export const RealmPage = ({ realmId }: RealmPageProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center mt-8 px-4 gap-4">
+    <div className="flex flex-col items-center mt-4 gap-4 sm:mt-8 sm:px-4">
       {/* Plain container (no tavern bg) */}
       <section className="w-full max-w-4xl">
         {/* Realm info box styled like UserCard */}
@@ -84,7 +84,7 @@ export const RealmPage = ({ realmId }: RealmPageProps) => {
 
           {/* Middle: name, description, info, rules */}
           <div className="min-w-0 flex-1">
-            <h1 className="m-0 truncate text-2xl uppercase tracking-wide text-[#FFFF55] [text-shadow:2px_2px_0_#3F3F15]">
+            <h1 className="m-0 truncate text-xl sm:text-2xl uppercase tracking-wide text-[#FFFF55] [text-shadow:2px_2px_0_#3F3F15]">
               {realm.name}
             </h1>
 
@@ -146,7 +146,7 @@ export const RealmPage = ({ realmId }: RealmPageProps) => {
           </div>
 
           {/* Right: level block */}
-          <div className="flex min-w-16 flex-col items-center">
+          <div className="flex shrink-0 flex-col items-center sm:min-w-16">
             <span className="text-[10px] tracking-widest text-[#E0E0E0]">
               LEVEL
             </span>

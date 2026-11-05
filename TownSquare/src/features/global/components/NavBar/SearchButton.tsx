@@ -66,23 +66,23 @@ export const SearchField = () => {
   return (
     <form
       id="search-bar"
-      className="flex items-center gap-2"
+      className="flex w-full items-center gap-2 md:w-auto"
       onSubmit={handleSearch}
     >
       <label htmlFor="search" className="text-white">
         <img
           src="/assets/icons/svg/MagnifyingGlassSilver.svg"
           alt=""
-          className={`h-14 w-14 object-contain`}
+          className="h-9 w-9 object-contain sm:h-14 sm:w-14 short:h-9 short:w-9"
         />
       </label>
-      <div className="relative">
+      <div className="relative min-w-0 flex-1 md:flex-none">
         <input
           type="search"
           id="search"
           name="search"
           autoComplete="off"
-          className="rounded border border-gray-300 px-2 py-1 text-white bg-gray-700"
+          className="w-full rounded border border-gray-300 px-2 py-1 text-white bg-gray-700"
           placeholder="Seek the Realms..."
           onChange={handleInputChange}
           onFocus={() => setOpen(true)}
@@ -92,7 +92,7 @@ export const SearchField = () => {
         />
         {open && search.trim() && (
           <ul
-            className="absolute left-0 top-full z-50 mt-1 max-h-72 w-64 overflow-y-auto
+            className="absolute left-0 top-full z-50 mt-1 max-h-72 w-full overflow-y-auto sm:w-64
         border-2 border-black bg-gray-700
         shadow-[inset_2px_2px_0_#5A5A5A,inset_-2px_-2px_0_#1A1A1A,0_4px_0_#000]"
           >
@@ -128,7 +128,7 @@ export const SearchField = () => {
     border-2 border-t-[#AAA] border-l-[#AAA] border-r-[#565656] border-b-[#565656]
     text-shadow-[3px_3px_#4C4C4C]
     outline-2 outline-solid outline-black
-    px-4 py-2 text-white
+    px-3 py-2 text-sm text-white sm:px-4 sm:text-base
     hover:bg-blue-400/50
   "
       >

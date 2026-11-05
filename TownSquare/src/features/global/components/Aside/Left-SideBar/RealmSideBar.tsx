@@ -30,7 +30,7 @@ export const RealmSideBar: React.FC<RealmSideBarProps> = ({
       >
         Create new realm
       </button>
-      <ScrollView className="h-[500px]">
+      <ScrollView className="mt-2 max-h-48 md:h-[500px] md:max-h-none short:max-h-48">
         <MyRealmList />
       </ScrollView>
     </>
