@@ -43,7 +43,6 @@ function createRealmsController(_service: RealmsService): RealmsController {
     },
 
     async follow(userId: string, realmId: string) {
-      console.log("(controller) ATTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACK")
       console.log("typeof realmsController.follow:", typeof realmsController.follow);
       const result = await _service.follow(userId, realmId);
       // return something simple; adjust as needed

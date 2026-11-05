@@ -40,3 +40,22 @@ export async function getPostById(id: string): Promise<Post> {
   }
   return result.data!;
 }
+
+export async function listPostsByRealm(realmId: number): Promise<Post[]> {
+  const res = await fetch(`/api/v1/posts/realm/${realmId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const result: Result<Post[]> = await res.json();
+
+  if (!result.success) {
+    throw new Error(
+      result.error?.message || "Kunne ikke hente poster for dette realmet",
+    );
+  }
+
+  return result.data ?? [];
+}

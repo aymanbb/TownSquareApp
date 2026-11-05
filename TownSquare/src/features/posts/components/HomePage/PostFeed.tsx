@@ -6,7 +6,7 @@ import PostList from "./PostList";
 import PostFeedHeader from "./PostHeader";
 
 import { useFetch } from "@/features/utils/useFetch";
-const PostFeed = () => {
+export const PostFeed = () => {
   //const [posts, setPosts] = useState<Post[]>([]);
   const { data, loading, error } = useFetch(listPosts, []);
 

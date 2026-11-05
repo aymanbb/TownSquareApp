@@ -73,7 +73,6 @@ function createRealmsService(_repository: RealmsRepository): RealmsService {
 
     async follow(_userId: string, _realmId: string): Promise<Result<string>> {
       try {
-        console.log("(service) ATTAAAAAAAAAAAAAAAAAAAACk")
         const result = await _repository.follow(_userId, _realmId);
         return { success: true, data: "You have followed this realm" };
       } catch (e){
