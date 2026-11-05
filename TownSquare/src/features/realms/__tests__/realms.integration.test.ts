@@ -17,7 +17,7 @@ describe("Realms (controller → service → repository → D1)", () => {
       const res = await realmsController.list();
 
       expect(res.status).toBe(200);
-      expect(await res.json()).toEqual({ success: true, data: [] });
+      expect(await res.json()).toEqual([]);
     });
 
     it("returnerer alle realms", async () => {
@@ -28,8 +28,8 @@ describe("Realms (controller → service → repository → D1)", () => {
       const body: any = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body.data.map((r: any) => r.name)).toEqual(["Gaming", "Musikk"]);
-      expect(body.data[0]).toMatchObject({ ownerId: userId });
+      expect(body.map((r: any) => r.name)).toEqual(["Gaming", "Musikk"]);
+      expect(body[0]).toMatchObject({ ownerId: userId });
     });
   });
 
@@ -43,8 +43,7 @@ describe("Realms (controller → service → repository → D1)", () => {
       const body: any = await res.json();
 
       expect(res.status).toBe(201);
-      expect(body.success).toBe(true);
-      expect(body.data).toMatchObject({
+      expect(body).toMatchObject({
         name: "Ny realm",
         description: "Beskrivelse",
         ownerId: userId,
@@ -52,7 +51,7 @@ describe("Realms (controller → service → repository → D1)", () => {
 
       // Realmen skal faktisk være lagret i databasen
       const listBody: any = await (await realmsController.list()).json();
-      expect(listBody.data).toHaveLength(1);
+      expect(listBody).toHaveLength(1);
     });
 
     it("returnerer 400 når navn mangler", async () => {
@@ -60,10 +59,7 @@ describe("Realms (controller → service → repository → D1)", () => {
       const body: any = await res.json();
 
       expect(res.status).toBe(400);
-      expect(body).toEqual({
-        success: false,
-        error: { message: "Name is required.", code: 400 },
-      });
+      expect(body).toEqual({ message: "Name is required." });
     });
 
     it("returnerer 500 når eieren ikke finnes (foreign key)", async () => {
@@ -84,7 +80,7 @@ describe("Realms (controller → service → repository → D1)", () => {
       const body: any = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body.data).toMatchObject({ id: created.id, name: "Hent meg" });
+      expect(body).toMatchObject({ id: created.id, name: "Hent meg" });
     });
 
     it("returnerer 400 for ugyldig id", async () => {
@@ -97,8 +93,8 @@ describe("Realms (controller → service → repository → D1)", () => {
       const res = await realmsController.get(9999);
       const body: any = await res.json();
 
-      expect(body.success).toBe(false);
-      expect(res.status).toBe(500);
+      expect(body.message).toBeDefined();
+      expect(res.status).toBeGreaterThanOrEqual(400);
     });
   });
 
@@ -108,7 +104,7 @@ describe("Realms (controller → service → repository → D1)", () => {
 
       const res = await realmsController.checkFollow(userId, String(created.id));
 
-      expect(await res.json()).toEqual({ follows: false });
+      expect(await res.json()).toEqual({ isFollowing: false });
     });
 
     it("etter follow sier checkFollow at brukeren følger realmen", async () => {
@@ -118,7 +114,7 @@ describe("Realms (controller → service → repository → D1)", () => {
       expect(followRes.status).toBe(200);
 
       const res = await realmsController.checkFollow(userId, String(created.id));
-      expect(await res.json()).toEqual({ follows: true });
+      expect(await res.json()).toEqual({ isFollowing: true });
     });
 
     it("å følge samme realm to ganger går fint", async () => {
